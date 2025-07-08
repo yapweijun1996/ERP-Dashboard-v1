@@ -20,6 +20,9 @@ class ERPDashboard {
         
         // Update date/time every minute
         setInterval(() => this.updateDateTime(), 60000);
+
+        // Refresh data every 5 minutes for demo purposes
+        setInterval(() => this.refreshDashboardData(), 300000);
     }
 
     setupEventListeners() {
@@ -36,6 +39,29 @@ class ERPDashboard {
             this.updateRevenueTrendsChart(e.target.value);
         });
 
+        // Refresh button
+        document.getElementById('refreshBtn')?.addEventListener('click', () => {
+            this.refreshDashboardData();
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + R for refresh (prevent default browser refresh)
+            if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
+                e.preventDefault();
+                this.refreshDashboardData();
+            }
+
+            // Number keys for section switching
+            if (e.key >= '1' && e.key <= '4') {
+                const sections = ['overview', 'sales', 'purchases', 'finances'];
+                const sectionIndex = parseInt(e.key) - 1;
+                if (sections[sectionIndex]) {
+                    this.switchSection(sections[sectionIndex]);
+                }
+            }
+        });
+
         // Responsive chart resize
         window.addEventListener('resize', () => {
             Object.values(this.charts).forEach(chart => {
@@ -48,12 +74,29 @@ class ERPDashboard {
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
         const years = ['2022', '2023', '2024'];
-        
+
+        // Generate more realistic trending data
+        const baseRevenue = 75000;
+        const growthRate = 0.05; // 5% monthly growth trend
+        const volatility = 0.15; // 15% random variation
+
         return {
-            // Sales Data
-            monthlyRevenue: months.map(() => Math.floor(Math.random() * 100000) + 50000),
-            quarterlyRevenue: quarters.map(() => Math.floor(Math.random() * 300000) + 150000),
-            yearlyRevenue: years.map(() => Math.floor(Math.random() * 1000000) + 500000),
+            // Sales Data with realistic trends
+            monthlyRevenue: months.map((month, index) => {
+                const trend = baseRevenue * Math.pow(1 + growthRate, index);
+                const variation = trend * (Math.random() - 0.5) * volatility;
+                return Math.floor(trend + variation);
+            }),
+            quarterlyRevenue: quarters.map((quarter, index) => {
+                const trend = 225000 * Math.pow(1 + growthRate * 3, index);
+                const variation = trend * (Math.random() - 0.5) * volatility;
+                return Math.floor(trend + variation);
+            }),
+            yearlyRevenue: years.map((year, index) => {
+                const trend = 900000 * Math.pow(1 + growthRate * 12, index);
+                const variation = trend * (Math.random() - 0.5) * volatility;
+                return Math.floor(trend + variation);
+            }),
             
             salesByCategory: {
                 labels: ['Electronics', 'Clothing', 'Home & Garden', 'Sports', 'Books', 'Automotive'],
@@ -142,6 +185,120 @@ class ERPDashboard {
             minimumFractionDigits: 0,
             maximumFractionDigits: 0
         }).format(amount);
+    }
+
+    showChartError(chartId, message) {
+        const canvas = document.getElementById(chartId);
+        const container = canvas?.closest('.chart-container');
+        if (container) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'chart-error';
+            errorDiv.innerHTML = `
+                <div class="error-content">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h4>Chart Loading Error</h4>
+                    <p>${message}</p>
+                    <button onclick="location.reload()" class="retry-btn">Retry</button>
+                </div>
+            `;
+            canvas.style.display = 'none';
+            container.appendChild(errorDiv);
+        }
+    }
+
+    refreshDashboardData() {
+        // Show loading state
+        this.showLoadingState();
+
+        // Simulate API call delay
+        setTimeout(() => {
+            try {
+                // Generate new mock data
+                this.mockData = this.generateMockData();
+
+                // Update KPIs
+                this.updateKPIs();
+
+                // Update all active charts with new data
+                Object.keys(this.charts).forEach(chartKey => {
+                    const chart = this.charts[chartKey];
+                    if (chart && chart.data) {
+                        this.updateChartData(chartKey, chart);
+                    }
+                });
+
+                // Hide loading state
+                this.hideLoadingState();
+
+                // Show refresh notification
+                this.showNotification('Dashboard data refreshed successfully', 'success');
+            } catch (error) {
+                this.hideLoadingState();
+                this.showNotification('Failed to refresh dashboard data', 'error');
+                console.error('Error refreshing dashboard:', error);
+            }
+        }, 1000);
+    }
+
+    showLoadingState() {
+        const refreshBtn = document.getElementById('refreshBtn');
+        if (refreshBtn) {
+            refreshBtn.disabled = true;
+            refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Refreshing...</span>';
+        }
+    }
+
+    hideLoadingState() {
+        const refreshBtn = document.getElementById('refreshBtn');
+        if (refreshBtn) {
+            refreshBtn.disabled = false;
+            refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i><span>Refresh</span>';
+        }
+    }
+
+    updateChartData(chartKey, chart) {
+        try {
+            switch(chartKey) {
+                case 'overview':
+                    chart.data.datasets[0].data = this.mockData.monthlyRevenue;
+                    chart.data.datasets[1].data = this.mockData.monthlyPurchases;
+                    break;
+                case 'revenueExpenses':
+                    chart.data.datasets[0].data = this.mockData.monthlyRevenue.slice(0, 6);
+                    chart.data.datasets[1].data = this.mockData.monthlyExpenses.slice(0, 6);
+                    break;
+                case 'revenueTrends':
+                    chart.data.datasets[0].data = this.mockData.monthlyRevenue;
+                    break;
+                // Add more chart updates as needed
+            }
+            chart.update('none'); // Update without animation for smooth refresh
+        } catch (error) {
+            console.error(`Error updating chart ${chartKey}:`, error);
+        }
+    }
+
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification notification--${type}`;
+        notification.innerHTML = `
+            <span>${message}</span>
+            <button class="notification__close">&times;</button>
+        `;
+
+        document.body.appendChild(notification);
+
+        // Auto-remove after 3 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 3000);
+
+        // Close button handler
+        notification.querySelector('.notification__close').addEventListener('click', () => {
+            notification.remove();
+        });
     }
 
     switchSection(sectionName) {
@@ -245,32 +402,80 @@ class ERPDashboard {
         return {
             responsive: true,
             maintainAspectRatio: false,
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
             plugins: {
                 legend: {
                     position: 'top',
                     labels: {
                         usePointStyle: true,
-                        padding: 20
+                        padding: 20,
+                        font: {
+                            size: 14,
+                            weight: '500'
+                        },
+                        color: '#1e293b'
                     }
                 },
                 tooltip: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
                     titleColor: '#ffffff',
                     bodyColor: '#ffffff',
                     borderColor: '#e2e8f0',
                     borderWidth: 1,
                     cornerRadius: 8,
-                    displayColors: true
+                    displayColors: true,
+                    titleFont: {
+                        size: 14,
+                        weight: '600'
+                    },
+                    bodyFont: {
+                        size: 13,
+                        weight: '500'
+                    },
+                    padding: 12,
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += new Intl.NumberFormat('en-US', {
+                                    style: 'currency',
+                                    currency: 'USD',
+                                    minimumFractionDigits: 0,
+                                    maximumFractionDigits: 0
+                                }).format(context.parsed.y);
+                            }
+                            return label;
+                        }
+                    }
                 }
             },
             scales: {
                 y: {
                     beginAtZero: true,
                     grid: {
-                        color: '#f1f5f9'
+                        color: '#f1f5f9',
+                        lineWidth: 1
                     },
                     ticks: {
-                        color: '#64748b'
+                        color: '#64748b',
+                        font: {
+                            size: 12,
+                            weight: '500'
+                        },
+                        callback: function(value) {
+                            return new Intl.NumberFormat('en-US', {
+                                style: 'currency',
+                                currency: 'USD',
+                                notation: 'compact',
+                                maximumFractionDigits: 1
+                            }).format(value);
+                        }
                     }
                 },
                 x: {
@@ -278,9 +483,35 @@ class ERPDashboard {
                         display: false
                     },
                     ticks: {
-                        color: '#64748b'
+                        color: '#64748b',
+                        font: {
+                            size: 12,
+                            weight: '500'
+                        }
                     }
                 }
+            },
+            elements: {
+                point: {
+                    radius: 4,
+                    hoverRadius: 6,
+                    borderWidth: 2
+                },
+                line: {
+                    borderWidth: 3,
+                    tension: 0.4
+                },
+                bar: {
+                    borderRadius: 4,
+                    borderSkipped: false
+                }
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeInOutQuart'
+            },
+            hover: {
+                animationDuration: 200
             }
         };
     }
@@ -289,7 +520,8 @@ class ERPDashboard {
         // Revenue Trends Chart
         const revenueTrendsCtx = document.getElementById('revenueTrendsChart');
         if (revenueTrendsCtx && !this.charts.revenueTrends) {
-            this.charts.revenueTrends = new Chart(revenueTrendsCtx, {
+            try {
+                this.charts.revenueTrends = new Chart(revenueTrendsCtx, {
                 type: 'line',
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -322,12 +554,17 @@ class ERPDashboard {
                     }
                 }
             });
+            } catch (error) {
+                console.error('Error initializing revenue trends chart:', error);
+                this.showChartError('revenueTrendsChart', 'Failed to load revenue trends chart');
+            }
         }
 
         // Sales by Category Chart
         const salesByCategoryCtx = document.getElementById('salesByCategoryChart');
         if (salesByCategoryCtx && !this.charts.salesByCategory) {
-            this.charts.salesByCategory = new Chart(salesByCategoryCtx, {
+            try {
+                this.charts.salesByCategory = new Chart(salesByCategoryCtx, {
                 type: 'doughnut',
                 data: {
                     labels: this.mockData.salesByCategory.labels,
@@ -360,6 +597,10 @@ class ERPDashboard {
                     }
                 }
             });
+            } catch (error) {
+                console.error('Error initializing sales by category chart:', error);
+                this.showChartError('salesByCategoryChart', 'Failed to load sales category chart');
+            }
         }
 
         // Monthly Sales Performance Chart

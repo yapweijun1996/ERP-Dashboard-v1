@@ -1,7 +1,10 @@
 // Executive Chart Implementations - Advanced Business Intelligence Visualizations
 
-// Extend ExecutiveDashboard with additional chart methods
-ExecutiveDashboard.prototype.initializePnLChart = function() {
+// Wait for ExecutiveDashboard to be defined, then extend it
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof ExecutiveDashboard !== 'undefined') {
+        // Extend ExecutiveDashboard with additional chart methods
+        ExecutiveDashboard.prototype.initializePnLChart = function() {
     const ctx = document.getElementById('exec-pnl-chart');
     if (!ctx || this.charts.pnlChart) return;
 
@@ -502,3 +505,6 @@ ExecutiveDashboard.prototype.initializeGrowthChart = function() {
         }
     });
 };
+
+    } // End of ExecutiveDashboard check
+}); // End of DOMContentLoaded
