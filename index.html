@@ -292,17 +292,66 @@
             box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
         }
 
+        .section-header {
+            margin: 3rem 0 2rem 0;
+            padding: 1rem 0;
+            border-bottom: 3px solid #e2e8f0;
+            position: relative;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-header .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
         @media (max-width: 768px) {
             .dashboard-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .container {
                 padding: 0 0.5rem;
             }
-            
+
             .header {
                 padding: 1rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .section-header .section-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -401,6 +450,31 @@
                 <div class="stat-label">Avg Order Value</div>
                 <div class="stat-change positive" id="aovChange">+5.7% from last month</div>
             </div>
+            <div class="stat-card">
+                <div class="stat-value" id="purchaseOrders">156</div>
+                <div class="stat-label">Purchase Orders</div>
+                <div class="stat-change positive" id="poChange">+12.3% from last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="stockTurnover">4.2x</div>
+                <div class="stat-label">Inventory Turnover</div>
+                <div class="stat-change positive" id="turnoverChange">+0.3x from last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="cashFlow">$89,450</div>
+                <div class="stat-label">Monthly Cash Flow</div>
+                <div class="stat-change positive" id="cashFlowChange">+18.2% from last month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="employeeCount">282</div>
+                <div class="stat-label">Total Employees</div>
+                <div class="stat-change positive" id="employeeChange">+4 from last month</div>
+            </div>
+        </div>
+
+        <!-- Overview Section -->
+        <div class="section-header">
+            <h2><span class="section-icon">📊</span>Business Overview</h2>
         </div>
 
         <div class="dashboard-grid">
@@ -485,6 +559,172 @@
                 <h3><span class="chart-icon">🔄</span>Order Status Distribution</h3>
                 <div class="chart-container">
                     <canvas id="orderStatusChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Sales Analytics Section -->
+        <div class="section-header">
+            <h2><span class="section-icon">💼</span>Sales Analytics</h2>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="chart-card wide-chart">
+                <h3><span class="chart-icon">💼</span>Sales Performance Dashboard</h3>
+                <div class="chart-container large">
+                    <canvas id="salesDashboardChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><span class="chart-icon">🎯</span>Sales Funnel Analysis</h3>
+                <div class="chart-container">
+                    <canvas id="salesFunnelChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><span class="chart-icon">👤</span>Top Sales Representatives</h3>
+                <div class="chart-container">
+                    <canvas id="salesRepChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><span class="chart-icon">📅</span>Sales Forecast vs Actual</h3>
+                <div class="chart-container">
+                    <canvas id="salesForecastChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Purchase Analytics Section -->
+        <div class="section-header">
+            <h2><span class="section-icon">🛒</span>Purchase Management</h2>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="chart-card wide-chart">
+                <h3><span class="chart-icon">🛒</span>Purchase Order Analytics</h3>
+                <div class="chart-container large">
+                    <canvas id="purchaseAnalyticsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><span class="chart-icon">🏭</span>Supplier Performance</h3>
+                <div class="chart-container">
+                    <canvas id="supplierChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><span class="chart-icon">💸</span>Purchase Cost Analysis</h3>
+                <div class="chart-container">
+                    <canvas id="purchaseCostChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><span class="chart-icon">⏱️</span>Purchase Lead Times</h3>
+                <div class="chart-container">
+                    <canvas id="leadTimeChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Inventory Management Section -->
+        <div class="section-header">
+            <h2><span class="section-icon">📦</span>Inventory Management</h2>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="chart-card wide-chart">
+                <h3><span class="chart-icon">📦</span>Inventory Management Dashboard</h3>
+                <div class="chart-container large">
+                    <canvas id="inventoryDashboardChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><span class="chart-icon">🔄</span>Inventory Turnover</h3>
+                <div class="chart-container">
+                    <canvas id="inventoryTurnoverChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><span class="chart-icon">⚠️</span>Stock Alerts & Reorder Points</h3>
+                <div class="chart-container">
+                    <canvas id="stockAlertsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><span class="chart-icon">📊</span>ABC Analysis</h3>
+                <div class="chart-container">
+                    <canvas id="abcAnalysisChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Financial Analytics Section -->
+            <div class="chart-card wide-chart">
+                <h3><span class="chart-icon">💰</span>Financial Performance Dashboard</h3>
+                <div class="chart-container large">
+                    <canvas id="financialDashboardChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><span class="chart-icon">📈</span>Profit & Loss Statement</h3>
+                <div class="chart-container">
+                    <canvas id="profitLossChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><span class="chart-icon">💳</span>Accounts Receivable</h3>
+                <div class="chart-container">
+                    <canvas id="receivableChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><span class="chart-icon">💸</span>Accounts Payable</h3>
+                <div class="chart-container">
+                    <canvas id="payableChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Employee Analytics Section -->
+            <div class="chart-card wide-chart">
+                <h3><span class="chart-icon">👥</span>Employee Performance Dashboard</h3>
+                <div class="chart-container large">
+                    <canvas id="employeeDashboardChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><span class="chart-icon">📊</span>Department Headcount</h3>
+                <div class="chart-container">
+                    <canvas id="headcountChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><span class="chart-icon">⏰</span>Employee Attendance</h3>
+                <div class="chart-container">
+                    <canvas id="attendanceChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3><span class="chart-icon">💼</span>Payroll Analysis</h3>
+                <div class="chart-container">
+                    <canvas id="payrollChart"></canvas>
                 </div>
             </div>
         </div>
@@ -667,7 +907,11 @@
                 activeCustomers: Math.floor(Math.random() * 1000) + 1500,
                 inventoryValue: Math.floor(Math.random() * 80000) + 60000,
                 profitMargin: (Math.random() * 10 + 20).toFixed(1),
-                avgOrderValue: Math.floor(Math.random() * 50) + 120
+                avgOrderValue: Math.floor(Math.random() * 50) + 120,
+                purchaseOrders: Math.floor(Math.random() * 50) + 120,
+                stockTurnover: (Math.random() * 2 + 3).toFixed(1),
+                cashFlow: Math.floor(Math.random() * 40000) + 60000,
+                employeeCount: Math.floor(Math.random() * 20) + 270
             };
 
             // Animate number changes
@@ -677,6 +921,10 @@
             animateValue('inventoryValue', parseInt(document.getElementById('inventoryValue').textContent.replace(/[$,]/g, '')), stats.inventoryValue, '$');
             animateValue('profitMargin', parseFloat(document.getElementById('profitMargin').textContent.replace('%', '')), stats.profitMargin, '', '%');
             animateValue('avgOrderValue', parseInt(document.getElementById('avgOrderValue').textContent.replace(/[$,]/g, '')), stats.avgOrderValue, '$');
+            animateValue('purchaseOrders', parseInt(document.getElementById('purchaseOrders').textContent.replace(/,/g, '')), stats.purchaseOrders);
+            animateValue('stockTurnover', parseFloat(document.getElementById('stockTurnover').textContent.replace('x', '')), stats.stockTurnover, '', 'x');
+            animateValue('cashFlow', parseInt(document.getElementById('cashFlow').textContent.replace(/[$,]/g, '')), stats.cashFlow, '$');
+            animateValue('employeeCount', parseInt(document.getElementById('employeeCount').textContent.replace(/,/g, '')), stats.employeeCount);
 
             // Update header stats
             document.getElementById('headerUsers').textContent = stats.totalOrders;
@@ -1107,6 +1355,503 @@
                     }
                 }
             });
+
+            // Initialize specialized charts
+            initializeSalesCharts();
+            initializePurchaseCharts();
+            initializeInventoryCharts();
+            initializeFinancialCharts();
+            initializeEmployeeCharts();
+        }
+
+        // Sales Analytics Charts
+        function initializeSalesCharts() {
+            // Sales Performance Dashboard
+            const salesDashboardCtx = document.getElementById('salesDashboardChart').getContext('2d');
+            charts.salesDashboard = new Chart(salesDashboardCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Sales Revenue',
+                        data: [450000, 520000, 480000, 610000, 580000, 670000, 720000, 690000, 750000, 820000, 780000, 850000],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        yAxisID: 'y'
+                    }, {
+                        label: 'Units Sold',
+                        data: [1200, 1450, 1300, 1680, 1520, 1780, 1920, 1850, 1980, 2150, 2080, 2250],
+                        borderColor: '#48bb78',
+                        backgroundColor: 'rgba(72, 187, 120, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        yAxisID: 'y1'
+                    }, {
+                        label: 'Conversion Rate (%)',
+                        data: [3.2, 3.8, 3.5, 4.1, 3.9, 4.3, 4.6, 4.4, 4.7, 5.1, 4.9, 5.3],
+                        borderColor: '#f093fb',
+                        backgroundColor: 'rgba(240, 147, 251, 0.1)',
+                        tension: 0.4,
+                        fill: false,
+                        yAxisID: 'y2'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000) + 'K';
+                                }
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: { drawOnChartArea: false }
+                        },
+                        y2: {
+                            type: 'linear',
+                            display: false,
+                            min: 0,
+                            max: 10
+                        }
+                    }
+                }
+            });
+
+            // Sales Funnel Chart
+            const salesFunnelCtx = document.getElementById('salesFunnelChart').getContext('2d');
+            charts.salesFunnel = new Chart(salesFunnelCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Leads', 'Qualified', 'Proposals', 'Negotiations', 'Closed Won'],
+                    datasets: [{
+                        label: 'Count',
+                        data: [1000, 650, 420, 280, 185],
+                        backgroundColor: [
+                            'rgba(102, 126, 234, 0.8)',
+                            'rgba(118, 75, 162, 0.8)',
+                            'rgba(240, 147, 251, 0.8)',
+                            'rgba(245, 87, 108, 0.8)',
+                            'rgba(72, 187, 120, 0.8)'
+                        ],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // Top Sales Representatives
+            const salesRepCtx = document.getElementById('salesRepChart').getContext('2d');
+            charts.salesRep = new Chart(salesRepCtx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: ['John Smith', 'Sarah Johnson', 'Mike Davis', 'Emily Brown', 'David Wilson'],
+                    datasets: [{
+                        label: 'Sales ($)',
+                        data: [125000, 118000, 112000, 108000, 95000],
+                        backgroundColor: colorSchemes.primary,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000) + 'K';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Sales Forecast vs Actual
+            const salesForecastCtx = document.getElementById('salesForecastChart').getContext('2d');
+            charts.salesForecast = new Chart(salesForecastCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                    datasets: [{
+                        label: 'Forecast',
+                        data: [85000, 92000, 88000, 95000, 91000, 98000],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderDash: [5, 5],
+                        fill: false
+                    }, {
+                        label: 'Actual',
+                        data: [82000, 96000, 91000, 89000, 94000, 102000],
+                        borderColor: '#48bb78',
+                        backgroundColor: 'rgba(72, 187, 120, 0.1)',
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000) + 'K';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Purchase Analytics Charts
+        function initializePurchaseCharts() {
+            // Purchase Order Analytics
+            const purchaseAnalyticsCtx = document.getElementById('purchaseAnalyticsChart').getContext('2d');
+            charts.purchaseAnalytics = new Chart(purchaseAnalyticsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Purchase Orders',
+                        data: [45, 52, 48, 61, 58, 67, 72, 69, 75, 82, 78, 85],
+                        borderColor: '#4299e1',
+                        backgroundColor: 'rgba(66, 153, 225, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        yAxisID: 'y'
+                    }, {
+                        label: 'Purchase Value ($)',
+                        data: [180000, 208000, 192000, 244000, 232000, 268000, 288000, 276000, 300000, 328000, 312000, 340000],
+                        borderColor: '#ed8936',
+                        backgroundColor: 'rgba(237, 137, 54, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left'
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: { drawOnChartArea: false },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000) + 'K';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Supplier Performance
+            const supplierCtx = document.getElementById('supplierChart').getContext('2d');
+            charts.supplier = new Chart(supplierCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Quality', 'Delivery Time', 'Price', 'Service', 'Reliability'],
+                    datasets: [{
+                        label: 'Supplier A',
+                        data: [85, 90, 75, 88, 92],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                        pointBackgroundColor: '#667eea'
+                    }, {
+                        label: 'Supplier B',
+                        data: [78, 85, 90, 82, 87],
+                        borderColor: '#48bb78',
+                        backgroundColor: 'rgba(72, 187, 120, 0.2)',
+                        pointBackgroundColor: '#48bb78'
+                    }, {
+                        label: 'Supplier C',
+                        data: [92, 78, 82, 90, 85],
+                        borderColor: '#f093fb',
+                        backgroundColor: 'rgba(240, 147, 251, 0.2)',
+                        pointBackgroundColor: '#f093fb'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // Purchase Cost Analysis
+            const purchaseCostCtx = document.getElementById('purchaseCostChart').getContext('2d');
+            charts.purchaseCost = new Chart(purchaseCostCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Raw Materials', 'Equipment', 'Services', 'Utilities', 'Other'],
+                    datasets: [{
+                        data: [45, 25, 15, 10, 5],
+                        backgroundColor: colorSchemes.primary,
+                        borderWidth: 3,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    },
+                    cutout: '60%'
+                }
+            });
+
+            // Purchase Lead Times
+            const leadTimeCtx = document.getElementById('leadTimeChart').getContext('2d');
+            charts.leadTime = new Chart(leadTimeCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Electronics', 'Raw Materials', 'Office Supplies', 'Equipment', 'Services'],
+                    datasets: [{
+                        label: 'Average Lead Time (Days)',
+                        data: [14, 21, 7, 35, 10],
+                        backgroundColor: colorSchemes.warning,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + ' days';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Inventory Management Charts
+        function initializeInventoryCharts() {
+            // Inventory Management Dashboard
+            const inventoryDashboardCtx = document.getElementById('inventoryDashboardChart').getContext('2d');
+            charts.inventoryDashboard = new Chart(inventoryDashboardCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Stock Value ($)',
+                        data: [450000, 420000, 480000, 510000, 485000, 520000, 495000, 530000, 515000, 545000, 525000, 560000],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        yAxisID: 'y'
+                    }, {
+                        label: 'Turnover Rate',
+                        data: [4.2, 4.5, 4.1, 3.8, 4.0, 3.9, 4.1, 3.7, 4.0, 3.8, 4.2, 4.0],
+                        borderColor: '#48bb78',
+                        backgroundColor: 'rgba(72, 187, 120, 0.1)',
+                        tension: 0.4,
+                        fill: false,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000) + 'K';
+                                }
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: { drawOnChartArea: false },
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toFixed(1) + 'x';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Inventory Turnover
+            const inventoryTurnoverCtx = document.getElementById('inventoryTurnoverChart').getContext('2d');
+            charts.inventoryTurnover = new Chart(inventoryTurnoverCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Electronics', 'Clothing', 'Home & Garden', 'Sports', 'Books', 'Automotive'],
+                    datasets: [{
+                        label: 'Turnover Rate',
+                        data: [6.2, 8.5, 4.1, 5.8, 3.2, 4.9],
+                        backgroundColor: colorSchemes.info,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + 'x';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Stock Alerts & Reorder Points
+            const stockAlertsCtx = document.getElementById('stockAlertsChart').getContext('2d');
+            charts.stockAlerts = new Chart(stockAlertsCtx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Current Stock vs Reorder Point',
+                        data: [
+                            {x: 50, y: 120}, {x: 30, y: 85}, {x: 75, y: 200},
+                            {x: 25, y: 45}, {x: 60, y: 150}, {x: 40, y: 95},
+                            {x: 80, y: 180}, {x: 35, y: 70}, {x: 55, y: 130}
+                        ],
+                        backgroundColor: function(context) {
+                            const point = context.parsed;
+                            return point.y < point.x ? '#f56565' : point.y < point.x * 1.5 ? '#ed8936' : '#48bb78';
+                        },
+                        borderColor: '#fff',
+                        borderWidth: 2,
+                        pointRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Reorder Point'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Current Stock'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // ABC Analysis
+            const abcAnalysisCtx = document.getElementById('abcAnalysisChart').getContext('2d');
+            charts.abcAnalysis = new Chart(abcAnalysisCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['A Items (High Value)', 'B Items (Medium Value)', 'C Items (Low Value)'],
+                    datasets: [{
+                        data: [20, 30, 50],
+                        backgroundColor: ['#f56565', '#ed8936', '#48bb78'],
+                        borderWidth: 3,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '50%'
+                }
+            });
         }
 
         // Initialize interactions and animations
@@ -1132,6 +1877,329 @@
 
             // Initialize periodic updates
             setInterval(updateHeaderStats, 30000); // Update every 30 seconds
+        }
+
+        // Financial Analytics Charts
+        function initializeFinancialCharts() {
+            // Financial Performance Dashboard
+            const financialDashboardCtx = document.getElementById('financialDashboardChart').getContext('2d');
+            charts.financialDashboard = new Chart(financialDashboardCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Revenue',
+                        data: [850000, 920000, 880000, 1020000, 980000, 1150000, 1080000, 1200000, 1140000, 1280000, 1220000, 1350000],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Expenses',
+                        data: [620000, 680000, 650000, 750000, 720000, 840000, 790000, 880000, 840000, 940000, 900000, 990000],
+                        borderColor: '#f56565',
+                        backgroundColor: 'rgba(245, 101, 101, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Net Profit',
+                        data: [230000, 240000, 230000, 270000, 260000, 310000, 290000, 320000, 300000, 340000, 320000, 360000],
+                        borderColor: '#48bb78',
+                        backgroundColor: 'rgba(72, 187, 120, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000) + 'K';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Profit & Loss Statement
+            const profitLossCtx = document.getElementById('profitLossChart').getContext('2d');
+            charts.profitLoss = new Chart(profitLossCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                    datasets: [{
+                        label: 'Gross Profit',
+                        data: [680000, 750000, 820000, 890000],
+                        backgroundColor: 'rgba(72, 187, 120, 0.8)'
+                    }, {
+                        label: 'Operating Expenses',
+                        data: [450000, 480000, 520000, 550000],
+                        backgroundColor: 'rgba(245, 101, 101, 0.8)'
+                    }, {
+                        label: 'Net Income',
+                        data: [230000, 270000, 300000, 340000],
+                        backgroundColor: 'rgba(102, 126, 234, 0.8)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000) + 'K';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Accounts Receivable
+            const receivableCtx = document.getElementById('receivableChart').getContext('2d');
+            charts.receivable = new Chart(receivableCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['0-30 Days', '31-60 Days', '61-90 Days', '90+ Days'],
+                    datasets: [{
+                        data: [65, 20, 10, 5],
+                        backgroundColor: ['#48bb78', '#ed8936', '#f093fb', '#f56565'],
+                        borderWidth: 3,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+
+            // Accounts Payable
+            const payableCtx = document.getElementById('payableChart').getContext('2d');
+            charts.payable = new Chart(payableCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Current', '1-30 Days', '31-60 Days', '61-90 Days', '90+ Days'],
+                    datasets: [{
+                        label: 'Amount ($)',
+                        data: [180000, 95000, 45000, 25000, 15000],
+                        backgroundColor: colorSchemes.warning,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000) + 'K';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Employee Analytics Charts
+        function initializeEmployeeCharts() {
+            // Employee Performance Dashboard
+            const employeeDashboardCtx = document.getElementById('employeeDashboardChart').getContext('2d');
+            charts.employeeDashboard = new Chart(employeeDashboardCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Employee Count',
+                        data: [245, 248, 252, 255, 258, 262, 265, 268, 271, 275, 278, 282],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        yAxisID: 'y'
+                    }, {
+                        label: 'Productivity Score',
+                        data: [85, 87, 86, 89, 88, 91, 90, 93, 92, 94, 93, 95],
+                        borderColor: '#48bb78',
+                        backgroundColor: 'rgba(72, 187, 120, 0.1)',
+                        tension: 0.4,
+                        fill: false,
+                        yAxisID: 'y1'
+                    }, {
+                        label: 'Satisfaction Score',
+                        data: [78, 80, 79, 82, 81, 84, 83, 86, 85, 87, 86, 88],
+                        borderColor: '#f093fb',
+                        backgroundColor: 'rgba(240, 147, 251, 0.1)',
+                        tension: 0.4,
+                        fill: false,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left'
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            min: 0,
+                            max: 100,
+                            grid: { drawOnChartArea: false }
+                        }
+                    }
+                }
+            });
+
+            // Department Headcount
+            const headcountCtx = document.getElementById('headcountChart').getContext('2d');
+            charts.headcount = new Chart(headcountCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Sales', 'Engineering', 'Marketing', 'HR', 'Finance', 'Operations'],
+                    datasets: [{
+                        label: 'Current Headcount',
+                        data: [45, 68, 25, 12, 18, 32],
+                        backgroundColor: colorSchemes.primary,
+                        borderRadius: 8
+                    }, {
+                        label: 'Target Headcount',
+                        data: [50, 75, 28, 15, 20, 35],
+                        backgroundColor: 'rgba(102, 126, 234, 0.3)',
+                        borderColor: '#667eea',
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // Employee Attendance
+            const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+            charts.attendance = new Chart(attendanceCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+                    datasets: [{
+                        label: 'Attendance Rate (%)',
+                        data: [94.5, 96.2, 93.8, 95.1, 97.3, 94.9],
+                        borderColor: '#48bb78',
+                        backgroundColor: 'rgba(72, 187, 120, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#48bb78',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6
+                    }, {
+                        label: 'Remote Work (%)',
+                        data: [35.2, 38.5, 42.1, 39.8, 36.4, 40.2],
+                        borderColor: '#4299e1',
+                        backgroundColor: 'rgba(66, 153, 225, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#4299e1',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Payroll Analysis
+            const payrollCtx = document.getElementById('payrollChart').getContext('2d');
+            charts.payroll = new Chart(payrollCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Base Salary', 'Benefits', 'Bonuses', 'Overtime', 'Other'],
+                    datasets: [{
+                        data: [70, 15, 8, 5, 2],
+                        backgroundColor: ['#667eea', '#48bb78', '#ed8936', '#f093fb', '#4299e1'],
+                        borderWidth: 3,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
         }
 
         // Show detailed chart information
