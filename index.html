@@ -49,6 +49,18 @@
                 <i class="fas fa-dollar-sign"></i>
                 Finances
             </button>
+            <button class="nav-tab" data-section="inventory">
+                <i class="fas fa-boxes"></i>
+                Inventory
+            </button>
+            <button class="nav-tab" data-section="hr-analytics">
+                <i class="fas fa-users"></i>
+                HR Analytics
+            </button>
+            <button class="nav-tab" data-section="operations">
+                <i class="fas fa-cogs"></i>
+                Operations
+            </button>
         </div>
     </nav>
 
@@ -377,6 +389,468 @@
                         <h3>Financial Ratios</h3>
                     </div>
                     <canvas id="financialRatiosChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Inventory Management Section -->
+        <section class="dashboard-section" id="inventory">
+            <div class="section-header">
+                <h2>Inventory Management</h2>
+                <p>Stock levels, turnover rates, and supply chain analytics</p>
+            </div>
+
+            <!-- Inventory KPIs -->
+            <div class="kpi-grid">
+                <div class="kpi-card executive-kpi">
+                    <div class="kpi-header">
+                        <div class="kpi-icon sales">
+                            <i class="fas fa-cubes"></i>
+                        </div>
+                        <div class="kpi-trend-indicator positive" id="inventoryTrend">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Total Inventory Value</h3>
+                        <p class="kpi-subtitle">Current Stock Valuation</p>
+                        <p class="kpi-value" id="totalInventory">$0</p>
+                        <div class="kpi-metrics">
+                            <span class="kpi-change positive" id="inventoryChange">+0%</span>
+                            <span class="kpi-period">vs last month</span>
+                        </div>
+                        <div class="kpi-target">
+                            <span class="target-label">Optimal: $2.5M</span>
+                            <div class="target-progress">
+                                <div class="progress-bar info" id="inventoryProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-card executive-kpi">
+                    <div class="kpi-header">
+                        <div class="kpi-icon purchases">
+                            <i class="fas fa-sync-alt"></i>
+                        </div>
+                        <div class="kpi-trend-indicator positive" id="turnoverTrend">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Inventory Turnover</h3>
+                        <p class="kpi-subtitle">Annual Turnover Rate</p>
+                        <p class="kpi-value" id="inventoryTurnover">0x</p>
+                        <div class="kpi-metrics">
+                            <span class="kpi-change positive" id="turnoverChange">+0%</span>
+                            <span class="kpi-period">efficiency gain</span>
+                        </div>
+                        <div class="kpi-target">
+                            <span class="target-label">Target: 8x annually</span>
+                            <div class="target-progress">
+                                <div class="progress-bar success" id="turnoverProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-card executive-kpi">
+                    <div class="kpi-header">
+                        <div class="kpi-icon finances">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="kpi-trend-indicator negative" id="stockoutTrend">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Stockout Rate</h3>
+                        <p class="kpi-subtitle">Out-of-Stock Incidents</p>
+                        <p class="kpi-value" id="stockoutRate">0%</p>
+                        <div class="kpi-metrics">
+                            <span class="kpi-change negative" id="stockoutChange">+0%</span>
+                            <span class="kpi-period">this month</span>
+                        </div>
+                        <div class="kpi-target">
+                            <span class="target-label">Target: <2%</span>
+                            <div class="target-progress">
+                                <div class="progress-bar warning" id="stockoutProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-card executive-kpi">
+                    <div class="kpi-header">
+                        <div class="kpi-icon cash">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="kpi-trend-indicator positive" id="deliveryTrend">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>On-Time Delivery</h3>
+                        <p class="kpi-subtitle">Supply Chain Performance</p>
+                        <p class="kpi-value" id="onTimeDelivery">0%</p>
+                        <div class="kpi-metrics">
+                            <span class="kpi-change positive" id="deliveryChange">+0%</span>
+                            <span class="kpi-period">improvement</span>
+                        </div>
+                        <div class="kpi-target">
+                            <span class="target-label">Target: 95%</span>
+                            <div class="target-progress">
+                                <div class="progress-bar success" id="deliveryProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Charts -->
+            <div class="charts-grid">
+                <div class="chart-container executive-chart">
+                    <div class="chart-header">
+                        <div class="chart-title-section">
+                            <h3>Inventory Levels by Category</h3>
+                            <p class="chart-subtitle">Stock Distribution Analysis</p>
+                        </div>
+                        <div class="chart-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">Categories</span>
+                                <span class="metric-value">12</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">SKUs</span>
+                                <span class="metric-value">2,847</span>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="inventoryLevelsChart"></canvas>
+                </div>
+
+                <div class="chart-container executive-chart">
+                    <div class="chart-header">
+                        <div class="chart-title-section">
+                            <h3>ABC Analysis</h3>
+                            <p class="chart-subtitle">Inventory Classification by Value</p>
+                        </div>
+                        <div class="chart-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">A-Items</span>
+                                <span class="metric-value">15%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Value</span>
+                                <span class="metric-value">80%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="abcAnalysisChart"></canvas>
+                </div>
+
+                <div class="chart-container executive-chart">
+                    <div class="chart-header">
+                        <div class="chart-title-section">
+                            <h3>Stock Movement Trends</h3>
+                            <p class="chart-subtitle">Inbound vs Outbound Flow</p>
+                        </div>
+                        <div class="chart-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">Velocity</span>
+                                <span class="metric-value positive">+12%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Days on Hand</span>
+                                <span class="metric-value">45</span>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="stockMovementChart"></canvas>
+                </div>
+
+                <div class="chart-container executive-chart">
+                    <div class="chart-header">
+                        <div class="chart-title-section">
+                            <h3>Supplier Performance</h3>
+                            <p class="chart-subtitle">Delivery & Quality Metrics</p>
+                        </div>
+                        <div class="chart-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">Top Supplier</span>
+                                <span class="metric-value">Supplier A</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Rating</span>
+                                <span class="metric-value positive">4.8/5</span>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="supplierPerformanceChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- HR Analytics Section -->
+        <section class="dashboard-section" id="hr-analytics">
+            <div class="section-header">
+                <h2>Human Resources Analytics</h2>
+                <p>Workforce metrics, performance indicators, and talent management</p>
+            </div>
+
+            <!-- HR KPIs -->
+            <div class="kpi-grid">
+                <div class="kpi-card executive-kpi">
+                    <div class="kpi-header">
+                        <div class="kpi-icon sales">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="kpi-trend-indicator positive" id="headcountTrend">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Total Headcount</h3>
+                        <p class="kpi-subtitle">Active Employees</p>
+                        <p class="kpi-value" id="totalHeadcount">0</p>
+                        <div class="kpi-metrics">
+                            <span class="kpi-change positive" id="headcountChange">+0%</span>
+                            <span class="kpi-period">vs last quarter</span>
+                        </div>
+                        <div class="kpi-target">
+                            <span class="target-label">Plan: 450 employees</span>
+                            <div class="target-progress">
+                                <div class="progress-bar info" id="headcountProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-card executive-kpi">
+                    <div class="kpi-header">
+                        <div class="kpi-icon purchases">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="kpi-trend-indicator positive" id="retentionTrend">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Employee Retention</h3>
+                        <p class="kpi-subtitle">Annual Retention Rate</p>
+                        <p class="kpi-value" id="employeeRetention">0%</p>
+                        <div class="kpi-metrics">
+                            <span class="kpi-change positive" id="retentionChange">+0%</span>
+                            <span class="kpi-period">improvement</span>
+                        </div>
+                        <div class="kpi-target">
+                            <span class="target-label">Target: >90%</span>
+                            <div class="target-progress">
+                                <div class="progress-bar success" id="retentionProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-card executive-kpi">
+                    <div class="kpi-header">
+                        <div class="kpi-icon finances">
+                            <i class="fas fa-smile"></i>
+                        </div>
+                        <div class="kpi-trend-indicator positive" id="satisfactionTrend">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Employee Satisfaction</h3>
+                        <p class="kpi-subtitle">Engagement Score</p>
+                        <p class="kpi-value" id="employeeSatisfaction">0/10</p>
+                        <div class="kpi-metrics">
+                            <span class="kpi-change positive" id="satisfactionChange">+0</span>
+                            <span class="kpi-period">points</span>
+                        </div>
+                        <div class="kpi-target">
+                            <span class="target-label">Target: >8.5/10</span>
+                            <div class="target-progress">
+                                <div class="progress-bar success" id="satisfactionProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-card executive-kpi">
+                    <div class="kpi-header">
+                        <div class="kpi-icon cash">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="kpi-trend-indicator positive" id="trainingTrend">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Training Hours</h3>
+                        <p class="kpi-subtitle">Per Employee (Annual)</p>
+                        <p class="kpi-value" id="trainingHours">0h</p>
+                        <div class="kpi-metrics">
+                            <span class="kpi-change positive" id="trainingChange">+0%</span>
+                            <span class="kpi-period">vs target</span>
+                        </div>
+                        <div class="kpi-target">
+                            <span class="target-label">Target: 40h/year</span>
+                            <div class="target-progress">
+                                <div class="progress-bar info" id="trainingProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HR Charts -->
+            <div class="charts-grid">
+                <div class="chart-container executive-chart">
+                    <div class="chart-header">
+                        <div class="chart-title-section">
+                            <h3>Workforce Demographics</h3>
+                            <p class="chart-subtitle">Age, Gender & Department Distribution</p>
+                        </div>
+                        <div class="chart-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">Avg Age</span>
+                                <span class="metric-value">32.5</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Diversity</span>
+                                <span class="metric-value">48%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="workforceDemographicsChart"></canvas>
+                </div>
+
+                <div class="chart-container executive-chart">
+                    <div class="chart-header">
+                        <div class="chart-title-section">
+                            <h3>Performance Ratings</h3>
+                            <p class="chart-subtitle">Employee Performance Distribution</p>
+                        </div>
+                        <div class="chart-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">Top Performers</span>
+                                <span class="metric-value">23%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Avg Rating</span>
+                                <span class="metric-value">4.2/5</span>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="performanceRatingsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Operations Section -->
+        <section class="dashboard-section" id="operations">
+            <div class="section-header">
+                <h2>Operations Management</h2>
+                <p>Production efficiency, quality metrics, and operational performance</p>
+            </div>
+
+            <!-- Operations KPIs -->
+            <div class="kpi-grid">
+                <div class="kpi-card executive-kpi">
+                    <div class="kpi-header">
+                        <div class="kpi-icon sales">
+                            <i class="fas fa-industry"></i>
+                        </div>
+                        <div class="kpi-trend-indicator positive" id="productionTrend">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Production Efficiency</h3>
+                        <p class="kpi-subtitle">Overall Equipment Effectiveness</p>
+                        <p class="kpi-value" id="productionEfficiency">0%</p>
+                        <div class="kpi-metrics">
+                            <span class="kpi-change positive" id="efficiencyChange">+0%</span>
+                            <span class="kpi-period">vs last month</span>
+                        </div>
+                        <div class="kpi-target">
+                            <span class="target-label">Target: >85%</span>
+                            <div class="target-progress">
+                                <div class="progress-bar success" id="efficiencyProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="kpi-card executive-kpi">
+                    <div class="kpi-header">
+                        <div class="kpi-icon purchases">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div class="kpi-trend-indicator positive" id="qualityTrend">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Quality Score</h3>
+                        <p class="kpi-subtitle">Defect Rate & Quality Index</p>
+                        <p class="kpi-value" id="qualityScore">0%</p>
+                        <div class="kpi-metrics">
+                            <span class="kpi-change positive" id="qualityChange">+0%</span>
+                            <span class="kpi-period">improvement</span>
+                        </div>
+                        <div class="kpi-target">
+                            <span class="target-label">Target: >99%</span>
+                            <div class="target-progress">
+                                <div class="progress-bar success" id="qualityProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operations Charts -->
+            <div class="charts-grid">
+                <div class="chart-container executive-chart">
+                    <div class="chart-header">
+                        <div class="chart-title-section">
+                            <h3>Production Metrics</h3>
+                            <p class="chart-subtitle">Output, Efficiency & Downtime Analysis</p>
+                        </div>
+                        <div class="chart-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">Uptime</span>
+                                <span class="metric-value">96.2%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Output</span>
+                                <span class="metric-value positive">+8%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="productionMetricsChart"></canvas>
+                </div>
+
+                <div class="chart-container executive-chart">
+                    <div class="chart-header">
+                        <div class="chart-title-section">
+                            <h3>Quality Control</h3>
+                            <p class="chart-subtitle">Defect Rates & Quality Trends</p>
+                        </div>
+                        <div class="chart-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">Defect Rate</span>
+                                <span class="metric-value">0.8%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">First Pass</span>
+                                <span class="metric-value">94.2%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="qualityControlChart"></canvas>
                 </div>
             </div>
         </section>

@@ -135,7 +135,23 @@ class ERPDashboard {
             financialRatios: {
                 labels: ['Current Ratio', 'Quick Ratio', 'Debt-to-Equity', 'ROI'],
                 data: [2.1, 1.8, 0.4, 15.2]
-            }
+            },
+
+            // Inventory Data
+            inventoryValue: 2200000,
+            inventoryTurnover: 6.8,
+            stockoutRate: 1.2,
+            onTimeDelivery: 94.5,
+
+            // HR Data
+            totalHeadcount: 425,
+            employeeRetention: 92.3,
+            employeeSatisfaction: 8.4,
+            trainingHours: 38.5,
+
+            // Operations Data
+            productionEfficiency: 94.2,
+            qualityScore: 99.2
         };
     }
 
@@ -188,6 +204,78 @@ class ERPDashboard {
 
         // Update chart metrics
         this.updateChartMetrics(avgRevenue, profitMargin, netProfit);
+
+        // Update new section KPIs
+        this.updateInventoryKPIs();
+        this.updateHRKPIs();
+        this.updateOperationsKPIs();
+    }
+
+    updateInventoryKPIs() {
+        // Update inventory KPIs
+        const totalInventoryEl = document.getElementById('totalInventory');
+        const inventoryTurnoverEl = document.getElementById('inventoryTurnover');
+        const stockoutRateEl = document.getElementById('stockoutRate');
+        const onTimeDeliveryEl = document.getElementById('onTimeDelivery');
+
+        if (totalInventoryEl) totalInventoryEl.textContent = this.formatCurrency(this.mockData.inventoryValue);
+        if (inventoryTurnoverEl) inventoryTurnoverEl.textContent = `${this.mockData.inventoryTurnover}x`;
+        if (stockoutRateEl) stockoutRateEl.textContent = `${this.mockData.stockoutRate}%`;
+        if (onTimeDeliveryEl) onTimeDeliveryEl.textContent = `${this.mockData.onTimeDelivery}%`;
+
+        // Update inventory change percentages
+        document.getElementById('inventoryChange')?.textContent = '+5.2%';
+        document.getElementById('turnoverChange')?.textContent = '+8.1%';
+        document.getElementById('stockoutChange')?.textContent = '-15.3%';
+        document.getElementById('deliveryChange')?.textContent = '+2.8%';
+
+        // Update inventory progress bars
+        this.updateProgressBar('inventoryProgress', (this.mockData.inventoryValue / 2500000) * 100);
+        this.updateProgressBar('turnoverProgress', (this.mockData.inventoryTurnover / 8) * 100);
+        this.updateProgressBar('stockoutProgress', (this.mockData.stockoutRate / 2) * 100);
+        this.updateProgressBar('deliveryProgress', (this.mockData.onTimeDelivery / 95) * 100);
+    }
+
+    updateHRKPIs() {
+        // Update HR KPIs
+        const totalHeadcountEl = document.getElementById('totalHeadcount');
+        const employeeRetentionEl = document.getElementById('employeeRetention');
+        const employeeSatisfactionEl = document.getElementById('employeeSatisfaction');
+        const trainingHoursEl = document.getElementById('trainingHours');
+
+        if (totalHeadcountEl) totalHeadcountEl.textContent = this.mockData.totalHeadcount.toString();
+        if (employeeRetentionEl) employeeRetentionEl.textContent = `${this.mockData.employeeRetention}%`;
+        if (employeeSatisfactionEl) employeeSatisfactionEl.textContent = `${this.mockData.employeeSatisfaction}/10`;
+        if (trainingHoursEl) trainingHoursEl.textContent = `${this.mockData.trainingHours}h`;
+
+        // Update HR change percentages
+        document.getElementById('headcountChange')?.textContent = '+6.2%';
+        document.getElementById('retentionChange')?.textContent = '+3.1%';
+        document.getElementById('satisfactionChange')?.textContent = '+0.3';
+        document.getElementById('trainingChange')?.textContent = '+12.5%';
+
+        // Update HR progress bars
+        this.updateProgressBar('headcountProgress', (this.mockData.totalHeadcount / 450) * 100);
+        this.updateProgressBar('retentionProgress', (this.mockData.employeeRetention / 90) * 100);
+        this.updateProgressBar('satisfactionProgress', (this.mockData.employeeSatisfaction / 8.5) * 100);
+        this.updateProgressBar('trainingProgress', (this.mockData.trainingHours / 40) * 100);
+    }
+
+    updateOperationsKPIs() {
+        // Update Operations KPIs
+        const productionEfficiencyEl = document.getElementById('productionEfficiency');
+        const qualityScoreEl = document.getElementById('qualityScore');
+
+        if (productionEfficiencyEl) productionEfficiencyEl.textContent = `${this.mockData.productionEfficiency}%`;
+        if (qualityScoreEl) qualityScoreEl.textContent = `${this.mockData.qualityScore}%`;
+
+        // Update operations change percentages
+        document.getElementById('efficiencyChange')?.textContent = '+2.1%';
+        document.getElementById('qualityChange')?.textContent = '+0.8%';
+
+        // Update operations progress bars
+        this.updateProgressBar('efficiencyProgress', (this.mockData.productionEfficiency / 85) * 100);
+        this.updateProgressBar('qualityProgress', (this.mockData.qualityScore / 99) * 100);
     }
 
     updateProgressBar(elementId, percentage) {
@@ -372,6 +460,15 @@ class ERPDashboard {
             case 'finances':
                 this.initializeFinanceCharts();
                 break;
+            case 'inventory':
+                this.initializeInventoryCharts();
+                break;
+            case 'hr-analytics':
+                this.initializeHRCharts();
+                break;
+            case 'operations':
+                this.initializeOperationsCharts();
+                break;
         }
     }
 
@@ -536,7 +633,8 @@ class ERPDashboard {
     getDefaultChartOptions() {
         return {
             responsive: true,
-            maintainAspectRatio: false,
+            maintainAspectRatio: true,
+            aspectRatio: 2.2,
             interaction: {
                 intersect: false,
                 mode: 'index'
@@ -1293,6 +1391,339 @@ class ERPDashboard {
         this.charts.revenueTrends.data.labels = labels;
         this.charts.revenueTrends.data.datasets[0].data = data;
         this.charts.revenueTrends.update();
+    }
+
+    initializeInventoryCharts() {
+        // Inventory Levels Chart
+        const inventoryLevelsCtx = document.getElementById('inventoryLevelsChart');
+        if (inventoryLevelsCtx && !this.charts.inventoryLevels) {
+            this.charts.inventoryLevels = new Chart(inventoryLevelsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Electronics', 'Clothing', 'Home & Garden', 'Sports', 'Books', 'Automotive'],
+                    datasets: [{
+                        label: 'Current Stock',
+                        data: [850, 620, 340, 280, 150, 120],
+                        backgroundColor: '#1d4ed8',
+                        borderRadius: 8
+                    }, {
+                        label: 'Reorder Level',
+                        data: [500, 400, 200, 150, 100, 80],
+                        backgroundColor: '#dc2626',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    ...this.getDefaultChartOptions(),
+                    plugins: {
+                        ...this.getDefaultChartOptions().plugins,
+                        tooltip: {
+                            ...this.getDefaultChartOptions().plugins.tooltip,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + ' units';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ABC Analysis Chart
+        const abcAnalysisCtx = document.getElementById('abcAnalysisChart');
+        if (abcAnalysisCtx && !this.charts.abcAnalysis) {
+            this.charts.abcAnalysis = new Chart(abcAnalysisCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['A-Items (High Value)', 'B-Items (Medium Value)', 'C-Items (Low Value)'],
+                    datasets: [{
+                        data: [15, 25, 60],
+                        backgroundColor: ['#dc2626', '#f59e0b', '#10b981'],
+                        borderWidth: 4,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    ...this.getDefaultChartOptions(),
+                    cutout: '50%',
+                    plugins: {
+                        ...this.getDefaultChartOptions().plugins,
+                        tooltip: {
+                            ...this.getDefaultChartOptions().plugins.tooltip,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '% of items';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Stock Movement Chart
+        const stockMovementCtx = document.getElementById('stockMovementChart');
+        if (stockMovementCtx && !this.charts.stockMovement) {
+            this.charts.stockMovement = new Chart(stockMovementCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Inbound',
+                        data: [450, 520, 380, 610, 490, 580, 620, 540, 590, 650, 720, 680],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }, {
+                        label: 'Outbound',
+                        data: [420, 480, 360, 580, 470, 550, 590, 520, 560, 620, 690, 650],
+                        borderColor: '#dc2626',
+                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    ...this.getDefaultChartOptions(),
+                    plugins: {
+                        ...this.getDefaultChartOptions().plugins,
+                        tooltip: {
+                            ...this.getDefaultChartOptions().plugins.tooltip,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y + ' units';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Supplier Performance Chart
+        const supplierPerformanceCtx = document.getElementById('supplierPerformanceChart');
+        if (supplierPerformanceCtx && !this.charts.supplierPerformance) {
+            this.charts.supplierPerformance = new Chart(supplierPerformanceCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['On-Time Delivery', 'Quality Score', 'Cost Competitiveness', 'Responsiveness', 'Reliability'],
+                    datasets: [{
+                        label: 'Supplier A',
+                        data: [95, 92, 88, 90, 94],
+                        borderColor: '#1d4ed8',
+                        backgroundColor: 'rgba(29, 78, 216, 0.2)',
+                        pointBackgroundColor: '#1d4ed8'
+                    }, {
+                        label: 'Supplier B',
+                        data: [88, 85, 92, 87, 89],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        pointBackgroundColor: '#10b981'
+                    }]
+                },
+                options: {
+                    ...this.getDefaultChartOptions(),
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: '#e2e8f0'
+                            },
+                            pointLabels: {
+                                color: '#475569',
+                                font: {
+                                    size: 12,
+                                    weight: '600'
+                                }
+                            },
+                            ticks: {
+                                color: '#64748b',
+                                backdropColor: 'transparent'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    initializeHRCharts() {
+        // Workforce Demographics Chart
+        const workforceDemographicsCtx = document.getElementById('workforceDemographicsChart');
+        if (workforceDemographicsCtx && !this.charts.workforceDemographics) {
+            this.charts.workforceDemographics = new Chart(workforceDemographicsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Engineering', 'Sales', 'Marketing', 'Operations', 'HR', 'Finance'],
+                    datasets: [{
+                        label: 'Male',
+                        data: [85, 45, 25, 60, 8, 15],
+                        backgroundColor: '#1d4ed8',
+                        borderRadius: 6
+                    }, {
+                        label: 'Female',
+                        data: [65, 55, 35, 40, 12, 18],
+                        backgroundColor: '#ec4899',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    ...this.getDefaultChartOptions(),
+                    scales: {
+                        ...this.getDefaultChartOptions().scales,
+                        x: {
+                            ...this.getDefaultChartOptions().scales.x,
+                            stacked: true
+                        },
+                        y: {
+                            ...this.getDefaultChartOptions().scales.y,
+                            stacked: true,
+                            ticks: {
+                                ...this.getDefaultChartOptions().scales.y.ticks,
+                                callback: function(value) {
+                                    return value + ' employees';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Performance Ratings Chart
+        const performanceRatingsCtx = document.getElementById('performanceRatingsChart');
+        if (performanceRatingsCtx && !this.charts.performanceRatings) {
+            this.charts.performanceRatings = new Chart(performanceRatingsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Exceeds Expectations', 'Meets Expectations', 'Below Expectations', 'Needs Improvement'],
+                    datasets: [{
+                        data: [23, 65, 10, 2],
+                        backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444'],
+                        borderWidth: 4,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    ...this.getDefaultChartOptions(),
+                    cutout: '60%',
+                    plugins: {
+                        ...this.getDefaultChartOptions().plugins,
+                        tooltip: {
+                            ...this.getDefaultChartOptions().plugins.tooltip,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '% of employees';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    initializeOperationsCharts() {
+        // Production Metrics Chart
+        const productionMetricsCtx = document.getElementById('productionMetricsChart');
+        if (productionMetricsCtx && !this.charts.productionMetrics) {
+            this.charts.productionMetrics = new Chart(productionMetricsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Production Output',
+                        data: [8500, 9200, 8800, 9500, 9100, 9800, 10200, 9600, 10100, 10500, 11000, 10800],
+                        borderColor: '#1d4ed8',
+                        backgroundColor: 'rgba(29, 78, 216, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }, {
+                        label: 'Efficiency %',
+                        data: [85, 88, 86, 90, 87, 92, 94, 89, 93, 95, 96, 94],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    ...this.getDefaultChartOptions(),
+                    scales: {
+                        ...this.getDefaultChartOptions().scales,
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            ticks: {
+                                color: '#64748b',
+                                font: {
+                                    size: 12,
+                                    weight: '600'
+                                },
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Quality Control Chart
+        const qualityControlCtx = document.getElementById('qualityControlChart');
+        if (qualityControlCtx && !this.charts.qualityControl) {
+            this.charts.qualityControl = new Chart(qualityControlCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Defect Rate (%)',
+                        data: [1.2, 0.9, 1.1, 0.8, 0.7, 0.6, 0.8, 0.9, 0.7, 0.6, 0.8, 0.7],
+                        backgroundColor: '#ef4444',
+                        borderRadius: 6
+                    }, {
+                        label: 'First Pass Yield (%)',
+                        data: [92, 94, 93, 95, 96, 97, 95, 94, 96, 97, 95, 96],
+                        backgroundColor: '#10b981',
+                        borderRadius: 6,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    ...this.getDefaultChartOptions(),
+                    scales: {
+                        ...this.getDefaultChartOptions().scales,
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            ticks: {
+                                color: '#64748b',
+                                font: {
+                                    size: 12,
+                                    weight: '600'
+                                },
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
 }
 
