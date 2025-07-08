@@ -165,17 +165,52 @@ class ERPDashboard {
         const totalPurchases = this.mockData.monthlyPurchases.reduce((sum, val) => sum + val, 0);
         const netProfit = totalRevenue - totalPurchases;
         const cashFlow = this.mockData.cashFlow.reduce((sum, val) => sum + val, 0);
+        const avgRevenue = totalRevenue / 12;
+        const profitMargin = ((netProfit / totalRevenue) * 100);
 
+        // Update main KPI values
         document.getElementById('totalRevenue').textContent = this.formatCurrency(totalRevenue);
         document.getElementById('totalPurchases').textContent = this.formatCurrency(totalPurchases);
         document.getElementById('netProfit').textContent = this.formatCurrency(netProfit);
         document.getElementById('cashFlow').textContent = this.formatCurrency(cashFlow);
 
-        // Update change percentages (mock data)
+        // Update change percentages with more realistic data
         document.getElementById('revenueChange').textContent = '+12.5%';
         document.getElementById('purchasesChange').textContent = '+8.3%';
         document.getElementById('profitChange').textContent = '+18.7%';
         document.getElementById('cashFlowChange').textContent = '+15.2%';
+
+        // Update progress bars
+        this.updateProgressBar('revenueProgress', (totalRevenue / 1200000) * 100); // Target: $1.2M
+        this.updateProgressBar('expensesProgress', (totalPurchases / 600000) * 100); // Budget: $600K
+        this.updateProgressBar('profitProgress', (profitMargin / 25) * 100); // Target: 25% margin
+        this.updateProgressBar('cashFlowProgress', (cashFlow / 200000) * 100); // Reserve: $200K
+
+        // Update chart metrics
+        this.updateChartMetrics(avgRevenue, profitMargin, netProfit);
+    }
+
+    updateProgressBar(elementId, percentage) {
+        const progressBar = document.getElementById(elementId);
+        if (progressBar) {
+            const clampedPercentage = Math.min(Math.max(percentage, 0), 100);
+            setTimeout(() => {
+                progressBar.style.width = `${clampedPercentage}%`;
+            }, 500);
+        }
+    }
+
+    updateChartMetrics(avgRevenue, profitMargin, netProfit) {
+        // Update overview chart metrics
+        const avgRevenueEl = document.getElementById('avgRevenue');
+        const growthRateEl = document.getElementById('growthRate');
+        const netMarginEl = document.getElementById('netMargin');
+        const ebitdaEl = document.getElementById('ebitda');
+
+        if (avgRevenueEl) avgRevenueEl.textContent = this.formatCurrency(avgRevenue);
+        if (growthRateEl) growthRateEl.textContent = '+12.5%';
+        if (netMarginEl) netMarginEl.textContent = `${profitMargin.toFixed(1)}%`;
+        if (ebitdaEl) ebitdaEl.textContent = this.formatCurrency(netProfit * 1.15); // Approximate EBITDA
     }
 
     formatCurrency(amount) {
@@ -341,57 +376,157 @@ class ERPDashboard {
     }
 
     initializeOverviewCharts() {
-        // Monthly Performance Overview
+        // Monthly Performance Overview - Executive Dashboard Style
         const overviewCtx = document.getElementById('overviewChart');
         if (overviewCtx && !this.charts.overview) {
             try {
                 this.charts.overview = new Chart(overviewCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    datasets: [{
-                        label: 'Revenue',
-                        data: this.mockData.monthlyRevenue,
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    }, {
-                        label: 'Purchases',
-                        data: this.mockData.monthlyPurchases,
-                        borderColor: '#06b6d4',
-                        backgroundColor: 'rgba(6, 182, 212, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: this.getDefaultChartOptions()
-            });
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Revenue Performance',
+                            data: this.mockData.monthlyRevenue,
+                            borderColor: '#059669',
+                            backgroundColor: 'rgba(5, 150, 105, 0.08)',
+                            pointBackgroundColor: '#059669',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 3,
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true,
+                            borderWidth: 4
+                        }, {
+                            label: 'Operating Expenses',
+                            data: this.mockData.monthlyPurchases,
+                            borderColor: '#dc2626',
+                            backgroundColor: 'rgba(220, 38, 38, 0.08)',
+                            pointBackgroundColor: '#dc2626',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 3,
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true,
+                            borderWidth: 4
+                        }]
+                    },
+                    options: {
+                        ...this.getDefaultChartOptions(),
+                        plugins: {
+                            ...this.getDefaultChartOptions().plugins,
+                            title: {
+                                display: false
+                            },
+                            legend: {
+                                ...this.getDefaultChartOptions().plugins.legend,
+                                position: 'top',
+                                align: 'start',
+                                labels: {
+                                    ...this.getDefaultChartOptions().plugins.legend.labels,
+                                    generateLabels: function(chart) {
+                                        const original = Chart.defaults.plugins.legend.labels.generateLabels;
+                                        const labels = original.call(this, chart);
+
+                                        labels.forEach((label, index) => {
+                                            const dataset = chart.data.datasets[index];
+                                            const total = dataset.data.reduce((sum, val) => sum + val, 0);
+                                            const avg = total / dataset.data.length;
+                                            label.text += ` (Avg: ${new Intl.NumberFormat('en-US', {
+                                                style: 'currency',
+                                                currency: 'USD',
+                                                notation: 'compact',
+                                                maximumFractionDigits: 1
+                                            }).format(avg)})`;
+                                        });
+
+                                        return labels;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
             } catch (error) {
                 console.error('Error initializing overview chart:', error);
             }
         }
 
-        // Revenue vs Expenses
+        // Revenue vs Expenses - Executive Summary
         const revenueExpensesCtx = document.getElementById('revenueExpensesChart');
         if (revenueExpensesCtx && !this.charts.revenueExpenses) {
             try {
                 this.charts.revenueExpenses = new Chart(revenueExpensesCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                    datasets: [{
-                        label: 'Revenue',
-                        data: this.mockData.monthlyRevenue.slice(0, 6),
-                        backgroundColor: '#10b981'
-                    }, {
-                        label: 'Expenses',
-                        data: this.mockData.monthlyExpenses.slice(0, 6),
-                        backgroundColor: '#ef4444'
-                    }]
-                },
-                options: this.getDefaultChartOptions()
-            });
+                    type: 'bar',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: 'Revenue',
+                            data: this.mockData.monthlyRevenue.slice(0, 6),
+                            backgroundColor: '#059669',
+                            borderRadius: 8,
+                            borderSkipped: false,
+                            borderWidth: 0
+                        }, {
+                            label: 'Expenses',
+                            data: this.mockData.monthlyExpenses.slice(0, 6),
+                            backgroundColor: '#dc2626',
+                            borderRadius: 8,
+                            borderSkipped: false,
+                            borderWidth: 0
+                        }, {
+                            label: 'Net Profit',
+                            data: this.mockData.monthlyRevenue.slice(0, 6).map((rev, i) =>
+                                rev - this.mockData.monthlyExpenses.slice(0, 6)[i]
+                            ),
+                            backgroundColor: '#1d4ed8',
+                            borderRadius: 8,
+                            borderSkipped: false,
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        ...this.getDefaultChartOptions(),
+                        plugins: {
+                            ...this.getDefaultChartOptions().plugins,
+                            legend: {
+                                ...this.getDefaultChartOptions().plugins.legend,
+                                labels: {
+                                    ...this.getDefaultChartOptions().plugins.legend.labels,
+                                    generateLabels: function(chart) {
+                                        const original = Chart.defaults.plugins.legend.labels.generateLabels;
+                                        const labels = original.call(this, chart);
+
+                                        labels.forEach((label, index) => {
+                                            const dataset = chart.data.datasets[index];
+                                            const total = dataset.data.reduce((sum, val) => sum + val, 0);
+                                            label.text += ` (${new Intl.NumberFormat('en-US', {
+                                                style: 'currency',
+                                                currency: 'USD',
+                                                notation: 'compact',
+                                                maximumFractionDigits: 1
+                                            }).format(total)})`;
+                                        });
+
+                                        return labels;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            ...this.getDefaultChartOptions().scales,
+                            y: {
+                                ...this.getDefaultChartOptions().scales.y,
+                                stacked: false
+                            },
+                            x: {
+                                ...this.getDefaultChartOptions().scales.x,
+                                stacked: false
+                            }
+                        }
+                    }
+                });
             } catch (error) {
                 console.error('Error initializing revenue expenses chart:', error);
             }
@@ -409,34 +544,47 @@ class ERPDashboard {
             plugins: {
                 legend: {
                     position: 'top',
+                    align: 'start',
                     labels: {
                         usePointStyle: true,
-                        padding: 20,
+                        pointStyle: 'circle',
+                        padding: 25,
                         font: {
-                            size: 14,
-                            weight: '500'
+                            size: 16,
+                            weight: '600',
+                            family: 'Inter'
                         },
-                        color: '#1e293b'
+                        color: '#1e293b',
+                        boxWidth: 12,
+                        boxHeight: 12
                     }
                 },
                 tooltip: {
-                    backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                    enabled: true,
+                    backgroundColor: 'rgba(15, 23, 42, 0.96)',
                     titleColor: '#ffffff',
                     bodyColor: '#ffffff',
-                    borderColor: '#e2e8f0',
-                    borderWidth: 1,
-                    cornerRadius: 8,
+                    borderColor: '#475569',
+                    borderWidth: 2,
+                    cornerRadius: 12,
                     displayColors: true,
                     titleFont: {
-                        size: 14,
-                        weight: '600'
+                        size: 16,
+                        weight: '700',
+                        family: 'Inter'
                     },
                     bodyFont: {
-                        size: 13,
-                        weight: '500'
+                        size: 14,
+                        weight: '600',
+                        family: 'Inter'
                     },
-                    padding: 12,
+                    padding: 16,
+                    caretSize: 8,
+                    caretPadding: 12,
                     callbacks: {
+                        title: function(context) {
+                            return context[0].label || '';
+                        },
                         label: function(context) {
                             let label = context.dataset.label || '';
                             if (label) {
@@ -451,6 +599,17 @@ class ERPDashboard {
                                 }).format(context.parsed.y);
                             }
                             return label;
+                        },
+                        afterLabel: function(context) {
+                            // Add percentage change if available
+                            const dataset = context.dataset;
+                            if (dataset.percentageChange && dataset.percentageChange[context.dataIndex]) {
+                                const change = dataset.percentageChange[context.dataIndex];
+                                const arrow = change >= 0 ? '↗' : '↘';
+                                const color = change >= 0 ? '#10b981' : '#ef4444';
+                                return `${arrow} ${Math.abs(change).toFixed(1)}% vs last period`;
+                            }
+                            return '';
                         }
                     }
                 }
@@ -459,15 +618,21 @@ class ERPDashboard {
                 y: {
                     beginAtZero: true,
                     grid: {
-                        color: '#f1f5f9',
-                        lineWidth: 1
+                        color: '#e2e8f0',
+                        lineWidth: 1,
+                        drawBorder: false
+                    },
+                    border: {
+                        display: false
                     },
                     ticks: {
-                        color: '#64748b',
+                        color: '#475569',
                         font: {
-                            size: 12,
-                            weight: '500'
+                            size: 14,
+                            weight: '600',
+                            family: 'Inter'
                         },
+                        padding: 12,
                         callback: function(value) {
                             return new Intl.NumberFormat('en-US', {
                                 style: 'currency',
@@ -482,121 +647,217 @@ class ERPDashboard {
                     grid: {
                         display: false
                     },
+                    border: {
+                        display: false
+                    },
                     ticks: {
-                        color: '#64748b',
+                        color: '#475569',
                         font: {
-                            size: 12,
-                            weight: '500'
-                        }
+                            size: 14,
+                            weight: '600',
+                            family: 'Inter'
+                        },
+                        padding: 8
                     }
                 }
             },
             elements: {
                 point: {
-                    radius: 4,
-                    hoverRadius: 6,
-                    borderWidth: 2
+                    radius: 6,
+                    hoverRadius: 8,
+                    borderWidth: 3,
+                    backgroundColor: '#ffffff'
                 },
                 line: {
-                    borderWidth: 3,
-                    tension: 0.4
+                    borderWidth: 4,
+                    tension: 0.3
                 },
                 bar: {
-                    borderRadius: 4,
-                    borderSkipped: false
+                    borderRadius: 6,
+                    borderSkipped: false,
+                    borderWidth: 0
                 }
             },
             animation: {
-                duration: 1000,
-                easing: 'easeInOutQuart'
+                duration: 1200,
+                easing: 'easeInOutCubic'
             },
             hover: {
-                animationDuration: 200
+                animationDuration: 300
             }
         };
     }
 
     initializeSalesCharts() {
-        // Revenue Trends Chart
+        // Revenue Growth Trajectory Chart - Executive Dashboard
         const revenueTrendsCtx = document.getElementById('revenueTrendsChart');
         if (revenueTrendsCtx && !this.charts.revenueTrends) {
             try {
                 this.charts.revenueTrends = new Chart(revenueTrendsCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    datasets: [{
-                        label: 'Revenue',
-                        data: this.mockData.monthlyRevenue,
-                        borderColor: '#2563eb',
-                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
-                        tension: 0.4,
-                        fill: true,
-                        pointBackgroundColor: '#2563eb',
-                        pointBorderColor: '#ffffff',
-                        pointBorderWidth: 2,
-                        pointRadius: 5
-                    }]
-                },
-                options: {
-                    ...this.getDefaultChartOptions(),
-                    scales: {
-                        ...this.getDefaultChartOptions().scales,
-                        y: {
-                            ...this.getDefaultChartOptions().scales.y,
-                            ticks: {
-                                ...this.getDefaultChartOptions().scales.y.ticks,
-                                callback: function(value) {
-                                    return '$' + value.toLocaleString();
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Actual Revenue',
+                            data: this.mockData.monthlyRevenue,
+                            borderColor: '#1d4ed8',
+                            backgroundColor: 'rgba(29, 78, 216, 0.1)',
+                            tension: 0.3,
+                            fill: true,
+                            pointBackgroundColor: '#1d4ed8',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 3,
+                            pointRadius: 7,
+                            pointHoverRadius: 9,
+                            borderWidth: 4
+                        }, {
+                            label: 'Target Revenue',
+                            data: this.mockData.monthlyRevenue.map(val => val * 1.15), // 15% higher target
+                            borderColor: '#059669',
+                            backgroundColor: 'transparent',
+                            tension: 0.3,
+                            fill: false,
+                            pointBackgroundColor: '#059669',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 3,
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            borderWidth: 3,
+                            borderDash: [10, 5]
+                        }]
+                    },
+                    options: {
+                        ...this.getDefaultChartOptions(),
+                        plugins: {
+                            ...this.getDefaultChartOptions().plugins,
+                            legend: {
+                                ...this.getDefaultChartOptions().plugins.legend,
+                                labels: {
+                                    ...this.getDefaultChartOptions().plugins.legend.labels,
+                                    generateLabels: function(chart) {
+                                        const original = Chart.defaults.plugins.legend.labels.generateLabels;
+                                        const labels = original.call(this, chart);
+
+                                        labels.forEach((label, index) => {
+                                            const dataset = chart.data.datasets[index];
+                                            const total = dataset.data.reduce((sum, val) => sum + val, 0);
+                                            const avg = total / dataset.data.length;
+                                            label.text += ` (Avg: ${new Intl.NumberFormat('en-US', {
+                                                style: 'currency',
+                                                currency: 'USD',
+                                                notation: 'compact',
+                                                maximumFractionDigits: 1
+                                            }).format(avg)})`;
+                                        });
+
+                                        return labels;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            ...this.getDefaultChartOptions().scales,
+                            y: {
+                                ...this.getDefaultChartOptions().scales.y,
+                                ticks: {
+                                    ...this.getDefaultChartOptions().scales.y.ticks,
+                                    callback: function(value) {
+                                        return new Intl.NumberFormat('en-US', {
+                                            style: 'currency',
+                                            currency: 'USD',
+                                            notation: 'compact',
+                                            maximumFractionDigits: 1
+                                        }).format(value);
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            });
+                });
             } catch (error) {
                 console.error('Error initializing revenue trends chart:', error);
                 this.showChartError('revenueTrendsChart', 'Failed to load revenue trends chart');
             }
         }
 
-        // Sales by Category Chart
+        // Market Segment Distribution Chart - Executive Style
         const salesByCategoryCtx = document.getElementById('salesByCategoryChart');
         if (salesByCategoryCtx && !this.charts.salesByCategory) {
             try {
                 this.charts.salesByCategory = new Chart(salesByCategoryCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: this.mockData.salesByCategory.labels,
-                    datasets: [{
-                        data: this.mockData.salesByCategory.data,
-                        backgroundColor: [
-                            '#2563eb',
-                            '#10b981',
-                            '#f59e0b',
-                            '#ef4444',
-                            '#8b5cf6',
-                            '#06b6d4'
-                        ],
-                        borderWidth: 2,
-                        borderColor: '#ffffff'
-                    }]
-                },
-                options: {
-                    ...this.getDefaultChartOptions(),
-                    plugins: {
-                        ...this.getDefaultChartOptions().plugins,
-                        tooltip: {
-                            ...this.getDefaultChartOptions().plugins.tooltip,
-                            callbacks: {
-                                label: function(context) {
-                                    return context.label + ': ' + context.parsed + '%';
+                    type: 'doughnut',
+                    data: {
+                        labels: this.mockData.salesByCategory.labels,
+                        datasets: [{
+                            data: this.mockData.salesByCategory.data,
+                            backgroundColor: [
+                                '#1d4ed8', // Electronics - Primary Blue
+                                '#059669', // Clothing - Success Green
+                                '#dc2626', // Home & Garden - Danger Red
+                                '#7c3aed', // Sports - Purple
+                                '#0891b2', // Books - Cyan
+                                '#ea580c'  // Automotive - Orange
+                            ],
+                            borderWidth: 4,
+                            borderColor: '#ffffff',
+                            hoverBorderWidth: 6,
+                            hoverOffset: 8
+                        }]
+                    },
+                    options: {
+                        ...this.getDefaultChartOptions(),
+                        cutout: '60%',
+                        plugins: {
+                            ...this.getDefaultChartOptions().plugins,
+                            legend: {
+                                ...this.getDefaultChartOptions().plugins.legend,
+                                position: 'right',
+                                labels: {
+                                    ...this.getDefaultChartOptions().plugins.legend.labels,
+                                    generateLabels: function(chart) {
+                                        const original = Chart.defaults.plugins.legend.labels.generateLabels;
+                                        const labels = original.call(this, chart);
+
+                                        labels.forEach((label, index) => {
+                                            const value = chart.data.datasets[0].data[index];
+                                            label.text += ` (${value}%)`;
+                                        });
+
+                                        return labels;
+                                    },
+                                    padding: 20,
+                                    usePointStyle: true,
+                                    pointStyle: 'circle'
+                                }
+                            },
+                            tooltip: {
+                                ...this.getDefaultChartOptions().plugins.tooltip,
+                                callbacks: {
+                                    title: function(context) {
+                                        return 'Market Segment Analysis';
+                                    },
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed;
+                                        const total = context.dataset.data.reduce((sum, val) => sum + val, 0);
+                                        const percentage = ((value / total) * 100).toFixed(1);
+                                        return `${label}: ${value}% of total revenue`;
+                                    },
+                                    afterLabel: function(context) {
+                                        const value = context.parsed;
+                                        const estimatedRevenue = (value / 100) * 1000000; // Assuming $1M total
+                                        return `Est. Revenue: ${new Intl.NumberFormat('en-US', {
+                                            style: 'currency',
+                                            currency: 'USD',
+                                            notation: 'compact',
+                                            maximumFractionDigits: 1
+                                        }).format(estimatedRevenue)}`;
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            });
+                });
             } catch (error) {
                 console.error('Error initializing sales by category chart:', error);
                 this.showChartError('salesByCategoryChart', 'Failed to load sales category chart');

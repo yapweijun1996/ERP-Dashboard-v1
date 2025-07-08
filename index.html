@@ -67,65 +67,151 @@
                 <p>Key performance indicators and summary metrics</p>
             </div>
             
-            <!-- KPI Cards -->
+            <!-- Executive KPI Cards -->
             <div class="kpi-grid">
-                <div class="kpi-card">
-                    <div class="kpi-icon sales">
-                        <i class="fas fa-chart-line"></i>
+                <div class="kpi-card executive-kpi">
+                    <div class="kpi-header">
+                        <div class="kpi-icon sales">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="kpi-trend-indicator positive" id="revenueTrend">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
                     </div>
                     <div class="kpi-content">
                         <h3>Total Revenue</h3>
+                        <p class="kpi-subtitle">Year-to-Date Performance</p>
                         <p class="kpi-value" id="totalRevenue">$0</p>
-                        <span class="kpi-change positive" id="revenueChange">+0%</span>
+                        <div class="kpi-metrics">
+                            <span class="kpi-change positive" id="revenueChange">+0%</span>
+                            <span class="kpi-period">vs last year</span>
+                        </div>
+                        <div class="kpi-target">
+                            <span class="target-label">Target: $1.2M</span>
+                            <div class="target-progress">
+                                <div class="progress-bar" id="revenueProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="kpi-card">
-                    <div class="kpi-icon purchases">
-                        <i class="fas fa-shopping-bag"></i>
+
+                <div class="kpi-card executive-kpi">
+                    <div class="kpi-header">
+                        <div class="kpi-icon purchases">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="kpi-trend-indicator negative" id="expensesTrend">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
                     </div>
                     <div class="kpi-content">
-                        <h3>Total Purchases</h3>
+                        <h3>Operating Expenses</h3>
+                        <p class="kpi-subtitle">Cost Management</p>
                         <p class="kpi-value" id="totalPurchases">$0</p>
-                        <span class="kpi-change negative" id="purchasesChange">+0%</span>
+                        <div class="kpi-metrics">
+                            <span class="kpi-change negative" id="purchasesChange">+0%</span>
+                            <span class="kpi-period">vs last year</span>
+                        </div>
+                        <div class="kpi-target">
+                            <span class="target-label">Budget: $600K</span>
+                            <div class="target-progress">
+                                <div class="progress-bar warning" id="expensesProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="kpi-card">
-                    <div class="kpi-icon finances">
-                        <i class="fas fa-wallet"></i>
+
+                <div class="kpi-card executive-kpi">
+                    <div class="kpi-header">
+                        <div class="kpi-icon finances">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="kpi-trend-indicator positive" id="profitTrend">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
                     </div>
                     <div class="kpi-content">
-                        <h3>Net Profit</h3>
+                        <h3>Net Profit Margin</h3>
+                        <p class="kpi-subtitle">Profitability Analysis</p>
                         <p class="kpi-value" id="netProfit">$0</p>
-                        <span class="kpi-change positive" id="profitChange">+0%</span>
+                        <div class="kpi-metrics">
+                            <span class="kpi-change positive" id="profitChange">+0%</span>
+                            <span class="kpi-period">margin improvement</span>
+                        </div>
+                        <div class="kpi-target">
+                            <span class="target-label">Target: 25% margin</span>
+                            <div class="target-progress">
+                                <div class="progress-bar success" id="profitProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="kpi-card">
-                    <div class="kpi-icon cash">
-                        <i class="fas fa-coins"></i>
+
+                <div class="kpi-card executive-kpi">
+                    <div class="kpi-header">
+                        <div class="kpi-icon cash">
+                            <i class="fas fa-water"></i>
+                        </div>
+                        <div class="kpi-trend-indicator positive" id="cashFlowTrend">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
                     </div>
                     <div class="kpi-content">
                         <h3>Cash Flow</h3>
+                        <p class="kpi-subtitle">Liquidity Position</p>
                         <p class="kpi-value" id="cashFlow">$0</p>
-                        <span class="kpi-change positive" id="cashFlowChange">+0%</span>
+                        <div class="kpi-metrics">
+                            <span class="kpi-change positive" id="cashFlowChange">+0%</span>
+                            <span class="kpi-period">monthly average</span>
+                        </div>
+                        <div class="kpi-target">
+                            <span class="target-label">Reserve: $200K</span>
+                            <div class="target-progress">
+                                <div class="progress-bar info" id="cashFlowProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Overview Charts -->
+            <!-- Executive Overview Charts -->
             <div class="charts-grid">
-                <div class="chart-container">
+                <div class="chart-container executive-chart">
                     <div class="chart-header">
-                        <h3>Monthly Performance Overview</h3>
+                        <div class="chart-title-section">
+                            <h3>Revenue vs Operating Expenses</h3>
+                            <p class="chart-subtitle">12-Month Performance Trend Analysis</p>
+                        </div>
+                        <div class="chart-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">Avg Revenue</span>
+                                <span class="metric-value" id="avgRevenue">$0</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Growth Rate</span>
+                                <span class="metric-value positive" id="growthRate">+0%</span>
+                            </div>
+                        </div>
                     </div>
                     <canvas id="overviewChart"></canvas>
                 </div>
-                
-                <div class="chart-container">
+
+                <div class="chart-container executive-chart">
                     <div class="chart-header">
-                        <h3>Revenue vs Expenses</h3>
+                        <div class="chart-title-section">
+                            <h3>Profit & Loss Summary</h3>
+                            <p class="chart-subtitle">6-Month Financial Performance</p>
+                        </div>
+                        <div class="chart-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">Net Margin</span>
+                                <span class="metric-value" id="netMargin">0%</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">EBITDA</span>
+                                <span class="metric-value" id="ebitda">$0</span>
+                            </div>
+                        </div>
                     </div>
                     <canvas id="revenueExpensesChart"></canvas>
                 </div>
@@ -135,42 +221,84 @@
         <!-- Sales Section -->
         <section class="dashboard-section" id="sales">
             <div class="section-header">
-                <h2>Sales Analytics</h2>
-                <p>Revenue trends, product performance, and sales insights</p>
+                <h2>Sales Performance Analytics</h2>
+                <p>Executive revenue insights, market trends, and strategic performance indicators</p>
             </div>
-            
+
             <div class="charts-grid">
-                <div class="chart-container">
+                <div class="chart-container executive-chart">
                     <div class="chart-header">
-                        <h3>Revenue Trends</h3>
+                        <div class="chart-title-section">
+                            <h3>Revenue Growth Trajectory</h3>
+                            <p class="chart-subtitle">Strategic Performance Analysis</p>
+                        </div>
                         <div class="chart-controls">
                             <select id="revenueTimeframe">
-                                <option value="monthly">Monthly</option>
-                                <option value="quarterly">Quarterly</option>
-                                <option value="yearly">Yearly</option>
+                                <option value="monthly">Monthly View</option>
+                                <option value="quarterly">Quarterly View</option>
+                                <option value="yearly">Annual View</option>
                             </select>
                         </div>
                     </div>
                     <canvas id="revenueTrendsChart"></canvas>
                 </div>
-                
-                <div class="chart-container">
+
+                <div class="chart-container executive-chart">
                     <div class="chart-header">
-                        <h3>Sales by Product Category</h3>
+                        <div class="chart-title-section">
+                            <h3>Market Segment Distribution</h3>
+                            <p class="chart-subtitle">Revenue by Product Category</p>
+                        </div>
+                        <div class="chart-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">Top Segment</span>
+                                <span class="metric-value">Electronics</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Market Share</span>
+                                <span class="metric-value">35%</span>
+                            </div>
+                        </div>
                     </div>
                     <canvas id="salesByCategoryChart"></canvas>
                 </div>
-                
-                <div class="chart-container">
+
+                <div class="chart-container executive-chart">
                     <div class="chart-header">
-                        <h3>Monthly Sales Performance</h3>
+                        <div class="chart-title-section">
+                            <h3>Monthly Sales Velocity</h3>
+                            <p class="chart-subtitle">Performance Momentum Analysis</p>
+                        </div>
+                        <div class="chart-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">Peak Month</span>
+                                <span class="metric-value">December</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Growth</span>
+                                <span class="metric-value positive">+24%</span>
+                            </div>
+                        </div>
                     </div>
                     <canvas id="monthlySalesChart"></canvas>
                 </div>
-                
-                <div class="chart-container">
+
+                <div class="chart-container executive-chart">
                     <div class="chart-header">
-                        <h3>Top Performing Products</h3>
+                        <div class="chart-title-section">
+                            <h3>Strategic Product Portfolio</h3>
+                            <p class="chart-subtitle">Top Revenue Generators</p>
+                        </div>
+                        <div class="chart-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">Leader</span>
+                                <span class="metric-value">Product A</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">Revenue</span>
+                                <span class="metric-value">$45K</span>
+                            </div>
+                        </div>
                     </div>
                     <canvas id="topProductsChart"></canvas>
                 </div>
