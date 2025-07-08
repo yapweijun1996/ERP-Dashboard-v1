@@ -1,0 +1,587 @@
+/* Executive Dashboard Styling - C-Suite Optimized */
+
+:root {
+    /* Executive Color Palette - Professional & Authoritative */
+    --exec-primary: #1a365d;        /* Deep Navy - Trust & Authority */
+    --exec-secondary: #2d3748;      /* Charcoal - Professional */
+    --exec-accent: #3182ce;         /* Corporate Blue - Action */
+    --exec-success: #38a169;        /* Forest Green - Growth */
+    --exec-warning: #d69e2e;        /* Gold - Caution */
+    --exec-danger: #e53e3e;         /* Corporate Red - Risk */
+    --exec-neutral: #718096;        /* Steel Gray - Neutral */
+    
+    /* Executive Background Colors */
+    --exec-bg-primary: #ffffff;     /* Pure White - Clean */
+    --exec-bg-secondary: #f7fafc;   /* Off White - Subtle */
+    --exec-bg-tertiary: #edf2f7;    /* Light Gray - Contrast */
+    --exec-bg-dark: #1a202c;        /* Dark Mode Option */
+    
+    /* Executive Text Colors - High Contrast */
+    --exec-text-primary: #1a202c;   /* Near Black - Maximum Readability */
+    --exec-text-secondary: #4a5568; /* Dark Gray - Supporting Text */
+    --exec-text-muted: #718096;     /* Medium Gray - Labels */
+    --exec-text-white: #ffffff;     /* Pure White - Dark Backgrounds */
+    --exec-text-inverse: #f7fafc;   /* Light Text on Dark */
+    
+    /* Executive Typography Scale - Presentation Ready */
+    --exec-font-xs: 0.875rem;       /* 14px - Small Labels */
+    --exec-font-sm: 1rem;           /* 16px - Body Text */
+    --exec-font-md: 1.125rem;       /* 18px - Emphasis */
+    --exec-font-lg: 1.25rem;        /* 20px - Subheadings */
+    --exec-font-xl: 1.5rem;         /* 24px - Headings */
+    --exec-font-2xl: 1.875rem;      /* 30px - Major Headings */
+    --exec-font-3xl: 2.25rem;       /* 36px - Display */
+    --exec-font-4xl: 3rem;          /* 48px - Hero Numbers */
+    
+    /* Executive Spacing - Generous & Clear */
+    --exec-space-xs: 0.5rem;        /* 8px */
+    --exec-space-sm: 0.75rem;       /* 12px */
+    --exec-space-md: 1rem;          /* 16px */
+    --exec-space-lg: 1.5rem;        /* 24px */
+    --exec-space-xl: 2rem;          /* 32px */
+    --exec-space-2xl: 3rem;         /* 48px */
+    --exec-space-3xl: 4rem;         /* 64px */
+    
+    /* Executive Shadows - Subtle Depth */
+    --exec-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
+    --exec-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+    --exec-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+    --exec-shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.12);
+    
+    /* Executive Border Radius - Clean Lines */
+    --exec-radius-sm: 0.25rem;      /* 4px */
+    --exec-radius-md: 0.5rem;       /* 8px */
+    --exec-radius-lg: 0.75rem;      /* 12px */
+    --exec-radius-xl: 1rem;         /* 16px */
+}
+
+/* Executive Typography */
+.exec-font-primary {
+    font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+}
+
+.exec-font-display {
+    font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+/* Executive KPI Cards */
+.exec-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--exec-space-xl);
+    margin-bottom: var(--exec-space-3xl);
+}
+
+.exec-kpi-card {
+    background: var(--exec-bg-primary);
+    border-radius: var(--exec-radius-lg);
+    padding: var(--exec-space-xl);
+    box-shadow: var(--exec-shadow-md);
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.exec-kpi-card:hover {
+    box-shadow: var(--exec-shadow-lg);
+    transform: translateY(-2px);
+}
+
+.exec-kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--exec-primary), var(--exec-accent));
+}
+
+.exec-kpi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--exec-space-lg);
+}
+
+.exec-kpi-title {
+    font-size: var(--exec-font-sm);
+    font-weight: 500;
+    color: var(--exec-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+}
+
+.exec-kpi-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--exec-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--exec-text-white);
+}
+
+.exec-kpi-value {
+    font-size: var(--exec-font-4xl);
+    font-weight: 700;
+    color: var(--exec-text-primary);
+    margin: 0 0 var(--exec-space-sm) 0;
+    line-height: 1;
+}
+
+.exec-kpi-change {
+    display: flex;
+    align-items: center;
+    gap: var(--exec-space-xs);
+    font-size: var(--exec-font-sm);
+    font-weight: 600;
+}
+
+.exec-kpi-change.positive {
+    color: var(--exec-success);
+}
+
+.exec-kpi-change.negative {
+    color: var(--exec-danger);
+}
+
+.exec-kpi-change.neutral {
+    color: var(--exec-neutral);
+}
+
+.exec-kpi-trend {
+    font-size: var(--exec-font-xs);
+    color: var(--exec-text-muted);
+    margin-top: var(--exec-space-xs);
+}
+
+/* Executive Chart Containers */
+.exec-chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+    gap: var(--exec-space-xl);
+    margin-bottom: var(--exec-space-3xl);
+}
+
+.exec-chart-container {
+    background: var(--exec-bg-primary);
+    border-radius: var(--exec-radius-lg);
+    padding: var(--exec-space-xl);
+    box-shadow: var(--exec-shadow-md);
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.exec-chart-container:hover {
+    box-shadow: var(--exec-shadow-lg);
+}
+
+.exec-chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--exec-space-xl);
+    padding-bottom: var(--exec-space-lg);
+    border-bottom: 2px solid var(--exec-bg-tertiary);
+}
+
+.exec-chart-title {
+    font-size: var(--exec-font-xl);
+    font-weight: 600;
+    color: var(--exec-text-primary);
+    margin: 0;
+}
+
+.exec-chart-subtitle {
+    font-size: var(--exec-font-sm);
+    color: var(--exec-text-secondary);
+    margin: var(--exec-space-xs) 0 0 0;
+}
+
+.exec-chart-controls {
+    display: flex;
+    gap: var(--exec-space-md);
+    align-items: center;
+}
+
+.exec-chart-control {
+    padding: var(--exec-space-sm) var(--exec-space-md);
+    border: 2px solid var(--exec-bg-tertiary);
+    border-radius: var(--exec-radius-md);
+    background: var(--exec-bg-primary);
+    color: var(--exec-text-primary);
+    font-size: var(--exec-font-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.exec-chart-control:hover {
+    border-color: var(--exec-accent);
+    background: var(--exec-bg-secondary);
+}
+
+.exec-chart-control.active {
+    background: var(--exec-accent);
+    color: var(--exec-text-white);
+    border-color: var(--exec-accent);
+}
+
+/* Executive Alert System */
+.exec-alert {
+    padding: var(--exec-space-lg);
+    border-radius: var(--exec-radius-md);
+    margin-bottom: var(--exec-space-lg);
+    border-left: 4px solid;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--exec-space-md);
+}
+
+.exec-alert.critical {
+    background: #fef2f2;
+    border-color: var(--exec-danger);
+    color: #991b1b;
+}
+
+.exec-alert.warning {
+    background: #fffbeb;
+    border-color: var(--exec-warning);
+    color: #92400e;
+}
+
+.exec-alert.success {
+    background: #f0fff4;
+    border-color: var(--exec-success);
+    color: #166534;
+}
+
+.exec-alert-icon {
+    font-size: 1.25rem;
+    margin-top: 2px;
+}
+
+.exec-alert-content h4 {
+    margin: 0 0 var(--exec-space-xs) 0;
+    font-weight: 600;
+}
+
+.exec-alert-content p {
+    margin: 0;
+    font-size: var(--exec-font-sm);
+}
+
+/* Executive Summary Cards */
+.exec-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--exec-space-lg);
+    margin-bottom: var(--exec-space-2xl);
+}
+
+.exec-summary-card {
+    background: var(--exec-bg-primary);
+    border-radius: var(--exec-radius-md);
+    padding: var(--exec-space-lg);
+    box-shadow: var(--exec-shadow-sm);
+    border: 1px solid #e2e8f0;
+}
+
+.exec-summary-title {
+    font-size: var(--exec-font-md);
+    font-weight: 600;
+    color: var(--exec-text-primary);
+    margin: 0 0 var(--exec-space-md) 0;
+}
+
+.exec-summary-value {
+    font-size: var(--exec-font-2xl);
+    font-weight: 700;
+    color: var(--exec-primary);
+    margin: 0 0 var(--exec-space-xs) 0;
+}
+
+.exec-summary-change {
+    font-size: var(--exec-font-xs);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: var(--exec-space-xs);
+}
+
+/* Executive Presentation Mode */
+.exec-presentation-mode {
+    --exec-font-xs: 1rem;           /* Larger for presentations */
+    --exec-font-sm: 1.125rem;
+    --exec-font-md: 1.25rem;
+    --exec-font-lg: 1.5rem;
+    --exec-font-xl: 1.875rem;
+    --exec-font-2xl: 2.25rem;
+    --exec-font-3xl: 3rem;
+    --exec-font-4xl: 4rem;
+}
+
+.exec-presentation-mode .exec-chart-container {
+    padding: var(--exec-space-2xl);
+}
+
+.exec-presentation-mode canvas {
+    height: 400px !important;
+}
+
+/* Executive Responsive Design */
+@media (max-width: 1200px) {
+    .exec-chart-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .exec-kpi-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .exec-kpi-value {
+        font-size: var(--exec-font-3xl);
+    }
+    
+    .exec-chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--exec-space-md);
+    }
+    
+    .exec-chart-controls {
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+    }
+}
+
+/* Executive KPI Modal */
+.exec-kpi-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.exec-kpi-modal-content {
+    background: var(--exec-bg-primary);
+    border-radius: var(--exec-radius-xl);
+    padding: var(--exec-space-2xl);
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: var(--exec-shadow-xl);
+    position: relative;
+    margin: var(--exec-space-lg);
+}
+
+.exec-kpi-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--exec-space-xl);
+    padding-bottom: var(--exec-space-lg);
+    border-bottom: 2px solid var(--exec-bg-tertiary);
+}
+
+.exec-kpi-modal-header h3 {
+    color: var(--exec-primary);
+    font-size: var(--exec-font-xl);
+    font-weight: 600;
+    margin: 0;
+}
+
+.exec-kpi-modal-close {
+    background: none;
+    border: none;
+    font-size: var(--exec-font-2xl);
+    color: var(--exec-text-secondary);
+    cursor: pointer;
+    padding: var(--exec-space-sm);
+    border-radius: var(--exec-radius-md);
+    transition: all 0.2s ease;
+}
+
+.exec-kpi-modal-close:hover {
+    background: var(--exec-bg-tertiary);
+    color: var(--exec-text-primary);
+}
+
+.exec-kpi-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--exec-space-lg);
+    margin-bottom: var(--exec-space-xl);
+}
+
+.exec-kpi-detail-item {
+    background: var(--exec-bg-secondary);
+    padding: var(--exec-space-lg);
+    border-radius: var(--exec-radius-md);
+    text-align: center;
+}
+
+.exec-kpi-detail-item h4 {
+    color: var(--exec-text-secondary);
+    font-size: var(--exec-font-sm);
+    font-weight: 500;
+    margin: 0 0 var(--exec-space-sm) 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.exec-kpi-detail-value {
+    color: var(--exec-primary);
+    font-size: var(--exec-font-2xl);
+    font-weight: 700;
+    margin: 0;
+}
+
+.exec-kpi-insights {
+    background: var(--exec-bg-secondary);
+    padding: var(--exec-space-lg);
+    border-radius: var(--exec-radius-md);
+    border-left: 4px solid var(--exec-accent);
+}
+
+.exec-kpi-insights h4 {
+    color: var(--exec-primary);
+    font-size: var(--exec-font-md);
+    font-weight: 600;
+    margin: 0 0 var(--exec-space-md) 0;
+}
+
+.exec-kpi-insights ul {
+    margin: 0;
+    padding-left: var(--exec-space-lg);
+    color: var(--exec-text-primary);
+}
+
+.exec-kpi-insights li {
+    margin-bottom: var(--exec-space-sm);
+    line-height: 1.6;
+}
+
+/* Executive Interactive Elements */
+.exec-kpi-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.exec-kpi-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--exec-shadow-lg);
+}
+
+.exec-kpi-card:active {
+    transform: translateY(-2px);
+}
+
+/* Executive Alerts Enhancement */
+.exec-alerts-container {
+    margin-bottom: var(--exec-space-2xl);
+}
+
+.exec-alert {
+    animation: slideInFromTop 0.5s ease-out;
+}
+
+@keyframes slideInFromTop {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Executive Chart Enhancements */
+.exec-chart-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.exec-chart-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--exec-primary), var(--exec-accent));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.exec-chart-container:hover::before {
+    opacity: 1;
+}
+
+/* Executive Status Indicators */
+.exec-status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--exec-space-xs);
+    padding: var(--exec-space-xs) var(--exec-space-sm);
+    border-radius: var(--exec-radius-sm);
+    font-size: var(--exec-font-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.exec-status-indicator.excellent {
+    background: #dcfce7;
+    color: var(--exec-success);
+}
+
+.exec-status-indicator.good {
+    background: #fef3c7;
+    color: var(--exec-warning);
+}
+
+.exec-status-indicator.concern {
+    background: #fef2f2;
+    color: var(--exec-danger);
+}
+
+/* Executive Print Styles */
+@media print {
+    .exec-kpi-card,
+    .exec-chart-container {
+        box-shadow: none;
+        border: 2px solid #e2e8f0;
+        break-inside: avoid;
+    }
+
+    .exec-chart-controls,
+    .exec-kpi-modal {
+        display: none;
+    }
+
+    .exec-kpi-card:hover {
+        transform: none;
+    }
+}
