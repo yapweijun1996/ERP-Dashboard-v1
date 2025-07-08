@@ -1469,7 +1469,7 @@
             // Top Sales Representatives
             const salesRepCtx = document.getElementById('salesRepChart').getContext('2d');
             charts.salesRep = new Chart(salesRepCtx, {
-                type: 'horizontalBar',
+                type: 'bar',
                 data: {
                     labels: ['John Smith', 'Sarah Johnson', 'Mike Davis', 'Emily Brown', 'David Wilson'],
                     datasets: [{
@@ -1480,6 +1480,7 @@
                     }]
                 },
                 options: {
+                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
