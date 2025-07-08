@@ -224,10 +224,15 @@ class ERPDashboard {
         if (onTimeDeliveryEl) onTimeDeliveryEl.textContent = `${this.mockData.onTimeDelivery}%`;
 
         // Update inventory change percentages
-        document.getElementById('inventoryChange')?.textContent = '+5.2%';
-        document.getElementById('turnoverChange')?.textContent = '+8.1%';
-        document.getElementById('stockoutChange')?.textContent = '-15.3%';
-        document.getElementById('deliveryChange')?.textContent = '+2.8%';
+        const inventoryChangeEl = document.getElementById('inventoryChange');
+        const turnoverChangeEl = document.getElementById('turnoverChange');
+        const stockoutChangeEl = document.getElementById('stockoutChange');
+        const deliveryChangeEl = document.getElementById('deliveryChange');
+
+        if (inventoryChangeEl) inventoryChangeEl.textContent = '+5.2%';
+        if (turnoverChangeEl) turnoverChangeEl.textContent = '+8.1%';
+        if (stockoutChangeEl) stockoutChangeEl.textContent = '-15.3%';
+        if (deliveryChangeEl) deliveryChangeEl.textContent = '+2.8%';
 
         // Update inventory progress bars
         this.updateProgressBar('inventoryProgress', (this.mockData.inventoryValue / 2500000) * 100);
@@ -249,10 +254,15 @@ class ERPDashboard {
         if (trainingHoursEl) trainingHoursEl.textContent = `${this.mockData.trainingHours}h`;
 
         // Update HR change percentages
-        document.getElementById('headcountChange')?.textContent = '+6.2%';
-        document.getElementById('retentionChange')?.textContent = '+3.1%';
-        document.getElementById('satisfactionChange')?.textContent = '+0.3';
-        document.getElementById('trainingChange')?.textContent = '+12.5%';
+        const headcountChangeEl = document.getElementById('headcountChange');
+        const retentionChangeEl = document.getElementById('retentionChange');
+        const satisfactionChangeEl = document.getElementById('satisfactionChange');
+        const trainingChangeEl = document.getElementById('trainingChange');
+
+        if (headcountChangeEl) headcountChangeEl.textContent = '+6.2%';
+        if (retentionChangeEl) retentionChangeEl.textContent = '+3.1%';
+        if (satisfactionChangeEl) satisfactionChangeEl.textContent = '+0.3';
+        if (trainingChangeEl) trainingChangeEl.textContent = '+12.5%';
 
         // Update HR progress bars
         this.updateProgressBar('headcountProgress', (this.mockData.totalHeadcount / 450) * 100);
@@ -270,8 +280,11 @@ class ERPDashboard {
         if (qualityScoreEl) qualityScoreEl.textContent = `${this.mockData.qualityScore}%`;
 
         // Update operations change percentages
-        document.getElementById('efficiencyChange')?.textContent = '+2.1%';
-        document.getElementById('qualityChange')?.textContent = '+0.8%';
+        const efficiencyChangeEl = document.getElementById('efficiencyChange');
+        const qualityChangeEl = document.getElementById('qualityChange');
+
+        if (efficiencyChangeEl) efficiencyChangeEl.textContent = '+2.1%';
+        if (qualityChangeEl) qualityChangeEl.textContent = '+0.8%';
 
         // Update operations progress bars
         this.updateProgressBar('efficiencyProgress', (this.mockData.productionEfficiency / 85) * 100);
