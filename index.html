@@ -3,870 +3,420 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ERP Dashboard - Business Analytics</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>ERP Pro System - Reports Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .header p {
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .chart-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .chart-card h3 {
+            color: #4a5568;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #718096;
+            margin-top: 0.5rem;
+        }
+
+        .controls {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .controls select, .controls button {
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .controls button {
+            background: #667eea;
+            color: white;
+            border: none;
+            transition: background 0.2s ease;
+        }
+
+        .controls button:hover {
+            background: #5a67d8;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 0 0.5rem;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <i class="fas fa-chart-line"></i>
-                <h1>ERP Dashboard</h1>
-            </div>
-            <div class="header-info">
-                <span class="date" id="currentDate"></span>
-                <button id="refreshBtn" class="header-btn" title="Refresh Data">
-                    <i class="fas fa-sync-alt"></i>
-                    <span>Refresh</span>
-                </button>
-                <div class="user-info">
-                    <i class="fas fa-user-circle"></i>
-                    <span>Admin User</span>
-                </div>
-            </div>
-        </div>
+        <h1>ERP Pro System</h1>
+        <p>Comprehensive Business Reports & Analytics Dashboard</p>
     </header>
 
-    <!-- Navigation -->
-    <nav class="nav-tabs">
-        <div class="nav-container">
-            <button class="nav-tab active" data-section="overview">
-                <i class="fas fa-tachometer-alt"></i>
-                Overview
-            </button>
-            <button class="nav-tab" data-section="sales">
-                <i class="fas fa-chart-bar"></i>
-                Sales
-            </button>
-            <button class="nav-tab" data-section="purchases">
-                <i class="fas fa-shopping-cart"></i>
-                Purchases
-            </button>
-            <button class="nav-tab" data-section="finances">
-                <i class="fas fa-dollar-sign"></i>
-                Finances
-            </button>
-            <button class="nav-tab" data-section="inventory">
-                <i class="fas fa-boxes"></i>
-                Inventory
-            </button>
-            <button class="nav-tab" data-section="hr-analytics">
-                <i class="fas fa-users"></i>
-                HR Analytics
-            </button>
-            <button class="nav-tab" data-section="operations">
-                <i class="fas fa-cogs"></i>
-                Operations
-            </button>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Loading Spinner -->
-        <div class="loading-spinner" id="loadingSpinner">
-            <div class="spinner"></div>
-            <p>Loading dashboard data...</p>
+    <div class="container">
+        <div class="controls">
+            <label for="dateRange">Date Range:</label>
+            <select id="dateRange">
+                <option value="7">Last 7 Days</option>
+                <option value="30" selected>Last 30 Days</option>
+                <option value="90">Last 90 Days</option>
+                <option value="365">Last Year</option>
+            </select>
+            
+            <label for="department">Department:</label>
+            <select id="department">
+                <option value="all">All Departments</option>
+                <option value="sales">Sales</option>
+                <option value="inventory">Inventory</option>
+                <option value="finance">Finance</option>
+                <option value="hr">Human Resources</option>
+            </select>
+            
+            <button onclick="updateReports()">Update Reports</button>
+            <button onclick="exportData()">Export Data</button>
         </div>
 
-        <!-- Overview Section -->
-        <section class="dashboard-section active" id="overview">
-            <div class="section-header">
-                <h2>Business Overview</h2>
-                <p>Key performance indicators and summary metrics</p>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalRevenue">$125,430</div>
+                <div class="stat-label">Total Revenue</div>
             </div>
-            
-            <!-- Executive KPI Cards -->
-            <div class="kpi-grid">
-                <div class="kpi-card executive-kpi">
-                    <div class="kpi-header">
-                        <div class="kpi-icon sales">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="kpi-trend-indicator positive" id="revenueTrend">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-content">
-                        <h3>Total Revenue</h3>
-                        <p class="kpi-subtitle">Year-to-Date Performance</p>
-                        <p class="kpi-value" id="totalRevenue">$0</p>
-                        <div class="kpi-metrics">
-                            <span class="kpi-change positive" id="revenueChange">+0%</span>
-                            <span class="kpi-period">vs last year</span>
-                        </div>
-                        <div class="kpi-target">
-                            <span class="target-label">Target: $1.2M</span>
-                            <div class="target-progress">
-                                <div class="progress-bar" id="revenueProgress" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="kpi-card executive-kpi">
-                    <div class="kpi-header">
-                        <div class="kpi-icon purchases">
-                            <i class="fas fa-shopping-cart"></i>
-                        </div>
-                        <div class="kpi-trend-indicator negative" id="expensesTrend">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-content">
-                        <h3>Operating Expenses</h3>
-                        <p class="kpi-subtitle">Cost Management</p>
-                        <p class="kpi-value" id="totalPurchases">$0</p>
-                        <div class="kpi-metrics">
-                            <span class="kpi-change negative" id="purchasesChange">+0%</span>
-                            <span class="kpi-period">vs last year</span>
-                        </div>
-                        <div class="kpi-target">
-                            <span class="target-label">Budget: $600K</span>
-                            <div class="target-progress">
-                                <div class="progress-bar warning" id="expensesProgress" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="kpi-card executive-kpi">
-                    <div class="kpi-header">
-                        <div class="kpi-icon finances">
-                            <i class="fas fa-chart-pie"></i>
-                        </div>
-                        <div class="kpi-trend-indicator positive" id="profitTrend">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-content">
-                        <h3>Net Profit Margin</h3>
-                        <p class="kpi-subtitle">Profitability Analysis</p>
-                        <p class="kpi-value" id="netProfit">$0</p>
-                        <div class="kpi-metrics">
-                            <span class="kpi-change positive" id="profitChange">+0%</span>
-                            <span class="kpi-period">margin improvement</span>
-                        </div>
-                        <div class="kpi-target">
-                            <span class="target-label">Target: 25% margin</span>
-                            <div class="target-progress">
-                                <div class="progress-bar success" id="profitProgress" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="kpi-card executive-kpi">
-                    <div class="kpi-header">
-                        <div class="kpi-icon cash">
-                            <i class="fas fa-water"></i>
-                        </div>
-                        <div class="kpi-trend-indicator positive" id="cashFlowTrend">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-content">
-                        <h3>Cash Flow</h3>
-                        <p class="kpi-subtitle">Liquidity Position</p>
-                        <p class="kpi-value" id="cashFlow">$0</p>
-                        <div class="kpi-metrics">
-                            <span class="kpi-change positive" id="cashFlowChange">+0%</span>
-                            <span class="kpi-period">monthly average</span>
-                        </div>
-                        <div class="kpi-target">
-                            <span class="target-label">Reserve: $200K</span>
-                            <div class="target-progress">
-                                <div class="progress-bar info" id="cashFlowProgress" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalOrders">1,247</div>
+                <div class="stat-label">Total Orders</div>
             </div>
-
-            <!-- Executive Overview Charts -->
-            <div class="charts-grid">
-                <div class="chart-container executive-chart">
-                    <div class="chart-header">
-                        <div class="chart-title-section">
-                            <h3>Revenue vs Operating Expenses</h3>
-                            <p class="chart-subtitle">12-Month Performance Trend Analysis</p>
-                        </div>
-                        <div class="chart-metrics">
-                            <div class="metric-item">
-                                <span class="metric-label">Avg Revenue</span>
-                                <span class="metric-value" id="avgRevenue">$0</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-label">Growth Rate</span>
-                                <span class="metric-value positive" id="growthRate">+0%</span>
-                            </div>
-                        </div>
-                    </div>
-                    <canvas id="overviewChart"></canvas>
-                </div>
-
-                <div class="chart-container executive-chart">
-                    <div class="chart-header">
-                        <div class="chart-title-section">
-                            <h3>Profit & Loss Summary</h3>
-                            <p class="chart-subtitle">6-Month Financial Performance</p>
-                        </div>
-                        <div class="chart-metrics">
-                            <div class="metric-item">
-                                <span class="metric-label">Net Margin</span>
-                                <span class="metric-value" id="netMargin">0%</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-label">EBITDA</span>
-                                <span class="metric-value" id="ebitda">$0</span>
-                            </div>
-                        </div>
-                    </div>
-                    <canvas id="revenueExpensesChart"></canvas>
-                </div>
+            <div class="stat-card">
+                <div class="stat-value" id="activeCustomers">892</div>
+                <div class="stat-label">Active Customers</div>
             </div>
-        </section>
-
-        <!-- Sales Section -->
-        <section class="dashboard-section" id="sales">
-            <div class="section-header">
-                <h2>Sales Performance Analytics</h2>
-                <p>Executive revenue insights, market trends, and strategic performance indicators</p>
+            <div class="stat-card">
+                <div class="stat-value" id="inventoryValue">$45,230</div>
+                <div class="stat-label">Inventory Value</div>
             </div>
-
-            <div class="charts-grid">
-                <div class="chart-container executive-chart">
-                    <div class="chart-header">
-                        <div class="chart-title-section">
-                            <h3>Revenue Growth Trajectory</h3>
-                            <p class="chart-subtitle">Strategic Performance Analysis</p>
-                        </div>
-                        <div class="chart-controls">
-                            <select id="revenueTimeframe">
-                                <option value="monthly">Monthly View</option>
-                                <option value="quarterly">Quarterly View</option>
-                                <option value="yearly">Annual View</option>
-                            </select>
-                        </div>
-                    </div>
-                    <canvas id="revenueTrendsChart"></canvas>
-                </div>
-
-                <div class="chart-container executive-chart">
-                    <div class="chart-header">
-                        <div class="chart-title-section">
-                            <h3>Market Segment Distribution</h3>
-                            <p class="chart-subtitle">Revenue by Product Category</p>
-                        </div>
-                        <div class="chart-metrics">
-                            <div class="metric-item">
-                                <span class="metric-label">Top Segment</span>
-                                <span class="metric-value">Electronics</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-label">Market Share</span>
-                                <span class="metric-value">35%</span>
-                            </div>
-                        </div>
-                    </div>
-                    <canvas id="salesByCategoryChart"></canvas>
-                </div>
-
-                <div class="chart-container executive-chart">
-                    <div class="chart-header">
-                        <div class="chart-title-section">
-                            <h3>Monthly Sales Velocity</h3>
-                            <p class="chart-subtitle">Performance Momentum Analysis</p>
-                        </div>
-                        <div class="chart-metrics">
-                            <div class="metric-item">
-                                <span class="metric-label">Peak Month</span>
-                                <span class="metric-value">December</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-label">Growth</span>
-                                <span class="metric-value positive">+24%</span>
-                            </div>
-                        </div>
-                    </div>
-                    <canvas id="monthlySalesChart"></canvas>
-                </div>
-
-                <div class="chart-container executive-chart">
-                    <div class="chart-header">
-                        <div class="chart-title-section">
-                            <h3>Strategic Product Portfolio</h3>
-                            <p class="chart-subtitle">Top Revenue Generators</p>
-                        </div>
-                        <div class="chart-metrics">
-                            <div class="metric-item">
-                                <span class="metric-label">Leader</span>
-                                <span class="metric-value">Product A</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-label">Revenue</span>
-                                <span class="metric-value">$45K</span>
-                            </div>
-                        </div>
-                    </div>
-                    <canvas id="topProductsChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <!-- Purchases Section -->
-        <section class="dashboard-section" id="purchases">
-            <div class="section-header">
-                <h2>Purchase Analytics</h2>
-                <p>Purchase orders, vendor analysis, and cost management</p>
-            </div>
-            
-            <div class="charts-grid">
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <h3>Purchase Orders Over Time</h3>
-                    </div>
-                    <canvas id="purchaseOrdersChart"></canvas>
-                </div>
-                
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <h3>Vendor Spending Analysis</h3>
-                    </div>
-                    <canvas id="vendorSpendingChart"></canvas>
-                </div>
-                
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <h3>Cost Trends</h3>
-                    </div>
-                    <canvas id="costTrendsChart"></canvas>
-                </div>
-                
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <h3>Purchase Categories</h3>
-                    </div>
-                    <canvas id="purchaseCategoriesChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <!-- Finances Section -->
-        <section class="dashboard-section" id="finances">
-            <div class="section-header">
-                <h2>Financial Analytics</h2>
-                <p>Profit & loss, cash flow, and expense management</p>
-            </div>
-            
-            <div class="charts-grid">
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <h3>Profit & Loss Overview</h3>
-                    </div>
-                    <canvas id="profitLossChart"></canvas>
-                </div>
-                
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <h3>Cash Flow Analysis</h3>
-                    </div>
-                    <canvas id="cashFlowChart"></canvas>
-                </div>
-                
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <h3>Expense Breakdown</h3>
-                    </div>
-                    <canvas id="expenseBreakdownChart"></canvas>
-                </div>
-                
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <h3>Financial Ratios</h3>
-                    </div>
-                    <canvas id="financialRatiosChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <!-- Inventory Management Section -->
-        <section class="dashboard-section" id="inventory">
-            <div class="section-header">
-                <h2>Inventory Management</h2>
-                <p>Stock levels, turnover rates, and supply chain analytics</p>
-            </div>
-
-            <!-- Inventory KPIs -->
-            <div class="kpi-grid">
-                <div class="kpi-card executive-kpi">
-                    <div class="kpi-header">
-                        <div class="kpi-icon sales">
-                            <i class="fas fa-cubes"></i>
-                        </div>
-                        <div class="kpi-trend-indicator positive" id="inventoryTrend">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-content">
-                        <h3>Total Inventory Value</h3>
-                        <p class="kpi-subtitle">Current Stock Valuation</p>
-                        <p class="kpi-value" id="totalInventory">$0</p>
-                        <div class="kpi-metrics">
-                            <span class="kpi-change positive" id="inventoryChange">+0%</span>
-                            <span class="kpi-period">vs last month</span>
-                        </div>
-                        <div class="kpi-target">
-                            <span class="target-label">Optimal: $2.5M</span>
-                            <div class="target-progress">
-                                <div class="progress-bar info" id="inventoryProgress" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="kpi-card executive-kpi">
-                    <div class="kpi-header">
-                        <div class="kpi-icon purchases">
-                            <i class="fas fa-sync-alt"></i>
-                        </div>
-                        <div class="kpi-trend-indicator positive" id="turnoverTrend">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-content">
-                        <h3>Inventory Turnover</h3>
-                        <p class="kpi-subtitle">Annual Turnover Rate</p>
-                        <p class="kpi-value" id="inventoryTurnover">0x</p>
-                        <div class="kpi-metrics">
-                            <span class="kpi-change positive" id="turnoverChange">+0%</span>
-                            <span class="kpi-period">efficiency gain</span>
-                        </div>
-                        <div class="kpi-target">
-                            <span class="target-label">Target: 8x annually</span>
-                            <div class="target-progress">
-                                <div class="progress-bar success" id="turnoverProgress" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="kpi-card executive-kpi">
-                    <div class="kpi-header">
-                        <div class="kpi-icon finances">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="kpi-trend-indicator negative" id="stockoutTrend">
-                            <i class="fas fa-arrow-down"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-content">
-                        <h3>Stockout Rate</h3>
-                        <p class="kpi-subtitle">Out-of-Stock Incidents</p>
-                        <p class="kpi-value" id="stockoutRate">0%</p>
-                        <div class="kpi-metrics">
-                            <span class="kpi-change negative" id="stockoutChange">+0%</span>
-                            <span class="kpi-period">this month</span>
-                        </div>
-                        <div class="kpi-target">
-                            <span class="target-label">Target: <2%</span>
-                            <div class="target-progress">
-                                <div class="progress-bar warning" id="stockoutProgress" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="kpi-card executive-kpi">
-                    <div class="kpi-header">
-                        <div class="kpi-icon cash">
-                            <i class="fas fa-truck"></i>
-                        </div>
-                        <div class="kpi-trend-indicator positive" id="deliveryTrend">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-content">
-                        <h3>On-Time Delivery</h3>
-                        <p class="kpi-subtitle">Supply Chain Performance</p>
-                        <p class="kpi-value" id="onTimeDelivery">0%</p>
-                        <div class="kpi-metrics">
-                            <span class="kpi-change positive" id="deliveryChange">+0%</span>
-                            <span class="kpi-period">improvement</span>
-                        </div>
-                        <div class="kpi-target">
-                            <span class="target-label">Target: 95%</span>
-                            <div class="target-progress">
-                                <div class="progress-bar success" id="deliveryProgress" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Inventory Charts -->
-            <div class="charts-grid">
-                <div class="chart-container executive-chart">
-                    <div class="chart-header">
-                        <div class="chart-title-section">
-                            <h3>Inventory Levels by Category</h3>
-                            <p class="chart-subtitle">Stock Distribution Analysis</p>
-                        </div>
-                        <div class="chart-metrics">
-                            <div class="metric-item">
-                                <span class="metric-label">Categories</span>
-                                <span class="metric-value">12</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-label">SKUs</span>
-                                <span class="metric-value">2,847</span>
-                            </div>
-                        </div>
-                    </div>
-                    <canvas id="inventoryLevelsChart"></canvas>
-                </div>
-
-                <div class="chart-container executive-chart">
-                    <div class="chart-header">
-                        <div class="chart-title-section">
-                            <h3>ABC Analysis</h3>
-                            <p class="chart-subtitle">Inventory Classification by Value</p>
-                        </div>
-                        <div class="chart-metrics">
-                            <div class="metric-item">
-                                <span class="metric-label">A-Items</span>
-                                <span class="metric-value">15%</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-label">Value</span>
-                                <span class="metric-value">80%</span>
-                            </div>
-                        </div>
-                    </div>
-                    <canvas id="abcAnalysisChart"></canvas>
-                </div>
-
-                <div class="chart-container executive-chart">
-                    <div class="chart-header">
-                        <div class="chart-title-section">
-                            <h3>Stock Movement Trends</h3>
-                            <p class="chart-subtitle">Inbound vs Outbound Flow</p>
-                        </div>
-                        <div class="chart-metrics">
-                            <div class="metric-item">
-                                <span class="metric-label">Velocity</span>
-                                <span class="metric-value positive">+12%</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-label">Days on Hand</span>
-                                <span class="metric-value">45</span>
-                            </div>
-                        </div>
-                    </div>
-                    <canvas id="stockMovementChart"></canvas>
-                </div>
-
-                <div class="chart-container executive-chart">
-                    <div class="chart-header">
-                        <div class="chart-title-section">
-                            <h3>Supplier Performance</h3>
-                            <p class="chart-subtitle">Delivery & Quality Metrics</p>
-                        </div>
-                        <div class="chart-metrics">
-                            <div class="metric-item">
-                                <span class="metric-label">Top Supplier</span>
-                                <span class="metric-value">Supplier A</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-label">Rating</span>
-                                <span class="metric-value positive">4.8/5</span>
-                            </div>
-                        </div>
-                    </div>
-                    <canvas id="supplierPerformanceChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <!-- HR Analytics Section -->
-        <section class="dashboard-section" id="hr-analytics">
-            <div class="section-header">
-                <h2>Human Resources Analytics</h2>
-                <p>Workforce metrics, performance indicators, and talent management</p>
-            </div>
-
-            <!-- HR KPIs -->
-            <div class="kpi-grid">
-                <div class="kpi-card executive-kpi">
-                    <div class="kpi-header">
-                        <div class="kpi-icon sales">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div class="kpi-trend-indicator positive" id="headcountTrend">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-content">
-                        <h3>Total Headcount</h3>
-                        <p class="kpi-subtitle">Active Employees</p>
-                        <p class="kpi-value" id="totalHeadcount">0</p>
-                        <div class="kpi-metrics">
-                            <span class="kpi-change positive" id="headcountChange">+0%</span>
-                            <span class="kpi-period">vs last quarter</span>
-                        </div>
-                        <div class="kpi-target">
-                            <span class="target-label">Plan: 450 employees</span>
-                            <div class="target-progress">
-                                <div class="progress-bar info" id="headcountProgress" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="kpi-card executive-kpi">
-                    <div class="kpi-header">
-                        <div class="kpi-icon purchases">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                        <div class="kpi-trend-indicator positive" id="retentionTrend">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-content">
-                        <h3>Employee Retention</h3>
-                        <p class="kpi-subtitle">Annual Retention Rate</p>
-                        <p class="kpi-value" id="employeeRetention">0%</p>
-                        <div class="kpi-metrics">
-                            <span class="kpi-change positive" id="retentionChange">+0%</span>
-                            <span class="kpi-period">improvement</span>
-                        </div>
-                        <div class="kpi-target">
-                            <span class="target-label">Target: >90%</span>
-                            <div class="target-progress">
-                                <div class="progress-bar success" id="retentionProgress" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="kpi-card executive-kpi">
-                    <div class="kpi-header">
-                        <div class="kpi-icon finances">
-                            <i class="fas fa-smile"></i>
-                        </div>
-                        <div class="kpi-trend-indicator positive" id="satisfactionTrend">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-content">
-                        <h3>Employee Satisfaction</h3>
-                        <p class="kpi-subtitle">Engagement Score</p>
-                        <p class="kpi-value" id="employeeSatisfaction">0/10</p>
-                        <div class="kpi-metrics">
-                            <span class="kpi-change positive" id="satisfactionChange">+0</span>
-                            <span class="kpi-period">points</span>
-                        </div>
-                        <div class="kpi-target">
-                            <span class="target-label">Target: >8.5/10</span>
-                            <div class="target-progress">
-                                <div class="progress-bar success" id="satisfactionProgress" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="kpi-card executive-kpi">
-                    <div class="kpi-header">
-                        <div class="kpi-icon cash">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <div class="kpi-trend-indicator positive" id="trainingTrend">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-content">
-                        <h3>Training Hours</h3>
-                        <p class="kpi-subtitle">Per Employee (Annual)</p>
-                        <p class="kpi-value" id="trainingHours">0h</p>
-                        <div class="kpi-metrics">
-                            <span class="kpi-change positive" id="trainingChange">+0%</span>
-                            <span class="kpi-period">vs target</span>
-                        </div>
-                        <div class="kpi-target">
-                            <span class="target-label">Target: 40h/year</span>
-                            <div class="target-progress">
-                                <div class="progress-bar info" id="trainingProgress" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- HR Charts -->
-            <div class="charts-grid">
-                <div class="chart-container executive-chart">
-                    <div class="chart-header">
-                        <div class="chart-title-section">
-                            <h3>Workforce Demographics</h3>
-                            <p class="chart-subtitle">Age, Gender & Department Distribution</p>
-                        </div>
-                        <div class="chart-metrics">
-                            <div class="metric-item">
-                                <span class="metric-label">Avg Age</span>
-                                <span class="metric-value">32.5</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-label">Diversity</span>
-                                <span class="metric-value">48%</span>
-                            </div>
-                        </div>
-                    </div>
-                    <canvas id="workforceDemographicsChart"></canvas>
-                </div>
-
-                <div class="chart-container executive-chart">
-                    <div class="chart-header">
-                        <div class="chart-title-section">
-                            <h3>Performance Ratings</h3>
-                            <p class="chart-subtitle">Employee Performance Distribution</p>
-                        </div>
-                        <div class="chart-metrics">
-                            <div class="metric-item">
-                                <span class="metric-label">Top Performers</span>
-                                <span class="metric-value">23%</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-label">Avg Rating</span>
-                                <span class="metric-value">4.2/5</span>
-                            </div>
-                        </div>
-                    </div>
-                    <canvas id="performanceRatingsChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <!-- Operations Section -->
-        <section class="dashboard-section" id="operations">
-            <div class="section-header">
-                <h2>Operations Management</h2>
-                <p>Production efficiency, quality metrics, and operational performance</p>
-            </div>
-
-            <!-- Operations KPIs -->
-            <div class="kpi-grid">
-                <div class="kpi-card executive-kpi">
-                    <div class="kpi-header">
-                        <div class="kpi-icon sales">
-                            <i class="fas fa-industry"></i>
-                        </div>
-                        <div class="kpi-trend-indicator positive" id="productionTrend">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-content">
-                        <h3>Production Efficiency</h3>
-                        <p class="kpi-subtitle">Overall Equipment Effectiveness</p>
-                        <p class="kpi-value" id="productionEfficiency">0%</p>
-                        <div class="kpi-metrics">
-                            <span class="kpi-change positive" id="efficiencyChange">+0%</span>
-                            <span class="kpi-period">vs last month</span>
-                        </div>
-                        <div class="kpi-target">
-                            <span class="target-label">Target: >85%</span>
-                            <div class="target-progress">
-                                <div class="progress-bar success" id="efficiencyProgress" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="kpi-card executive-kpi">
-                    <div class="kpi-header">
-                        <div class="kpi-icon purchases">
-                            <i class="fas fa-award"></i>
-                        </div>
-                        <div class="kpi-trend-indicator positive" id="qualityTrend">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                    </div>
-                    <div class="kpi-content">
-                        <h3>Quality Score</h3>
-                        <p class="kpi-subtitle">Defect Rate & Quality Index</p>
-                        <p class="kpi-value" id="qualityScore">0%</p>
-                        <div class="kpi-metrics">
-                            <span class="kpi-change positive" id="qualityChange">+0%</span>
-                            <span class="kpi-period">improvement</span>
-                        </div>
-                        <div class="kpi-target">
-                            <span class="target-label">Target: >99%</span>
-                            <div class="target-progress">
-                                <div class="progress-bar success" id="qualityProgress" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Operations Charts -->
-            <div class="charts-grid">
-                <div class="chart-container executive-chart">
-                    <div class="chart-header">
-                        <div class="chart-title-section">
-                            <h3>Production Metrics</h3>
-                            <p class="chart-subtitle">Output, Efficiency & Downtime Analysis</p>
-                        </div>
-                        <div class="chart-metrics">
-                            <div class="metric-item">
-                                <span class="metric-label">Uptime</span>
-                                <span class="metric-value">96.2%</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-label">Output</span>
-                                <span class="metric-value positive">+8%</span>
-                            </div>
-                        </div>
-                    </div>
-                    <canvas id="productionMetricsChart"></canvas>
-                </div>
-
-                <div class="chart-container executive-chart">
-                    <div class="chart-header">
-                        <div class="chart-title-section">
-                            <h3>Quality Control</h3>
-                            <p class="chart-subtitle">Defect Rates & Quality Trends</p>
-                        </div>
-                        <div class="chart-metrics">
-                            <div class="metric-item">
-                                <span class="metric-label">Defect Rate</span>
-                                <span class="metric-value">0.8%</span>
-                            </div>
-                            <div class="metric-item">
-                                <span class="metric-label">First Pass</span>
-                                <span class="metric-value">94.2%</span>
-                            </div>
-                        </div>
-                    </div>
-                    <canvas id="qualityControlChart"></canvas>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <p>&copy; 2024 ERP Dashboard. All rights reserved.</p>
-            <p>Last updated: <span id="lastUpdated"></span></p>
         </div>
-    </footer>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-    <script src="script.js"></script>
+        <div class="dashboard-grid">
+            <div class="chart-card">
+                <h3>Monthly Revenue Trend</h3>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3>Sales by Department</h3>
+                <div class="chart-container">
+                    <canvas id="departmentChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3>Inventory Status</h3>
+                <div class="chart-container">
+                    <canvas id="inventoryChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3>Customer Growth</h3>
+                <div class="chart-container">
+                    <canvas id="customerChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chart configurations and data
+        let charts = {};
+
+        // Initialize all charts
+        function initializeCharts() {
+            // Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            charts.revenue = new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Revenue ($)',
+                        data: [12000, 19000, 15000, 25000, 22000, 30000],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Department Chart
+            const departmentCtx = document.getElementById('departmentChart').getContext('2d');
+            charts.department = new Chart(departmentCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Sales', 'Marketing', 'Operations', 'Support'],
+                    datasets: [{
+                        data: [35, 25, 25, 15],
+                        backgroundColor: [
+                            '#667eea',
+                            '#764ba2',
+                            '#f093fb',
+                            '#f5576c'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update reports based on filters
+        function updateReports() {
+            const dateRange = document.getElementById('dateRange').value;
+            const department = document.getElementById('department').value;
+
+            // Simulate data update
+            console.log(`Updating reports for ${dateRange} days, department: ${department}`);
+
+            // Update stats (simulate new data)
+            updateStats();
+
+            // Update charts with new data
+            updateChartData();
+        }
+
+        // Update statistics
+        function updateStats() {
+            const stats = {
+                totalRevenue: Math.floor(Math.random() * 200000) + 100000,
+                totalOrders: Math.floor(Math.random() * 2000) + 1000,
+                activeCustomers: Math.floor(Math.random() * 1000) + 500,
+                inventoryValue: Math.floor(Math.random() * 80000) + 30000
+            };
+
+            document.getElementById('totalRevenue').textContent = '$' + stats.totalRevenue.toLocaleString();
+            document.getElementById('totalOrders').textContent = stats.totalOrders.toLocaleString();
+            document.getElementById('activeCustomers').textContent = stats.activeCustomers.toLocaleString();
+            document.getElementById('inventoryValue').textContent = '$' + stats.inventoryValue.toLocaleString();
+        }
+
+        // Update chart data
+        function updateChartData() {
+            // Update revenue chart
+            const newRevenueData = Array.from({length: 6}, () => Math.floor(Math.random() * 30000) + 10000);
+            charts.revenue.data.datasets[0].data = newRevenueData;
+            charts.revenue.update();
+
+            // Update department chart
+            const newDepartmentData = Array.from({length: 4}, () => Math.floor(Math.random() * 40) + 10);
+            charts.department.data.datasets[0].data = newDepartmentData;
+            charts.department.update();
+        }
+
+        // Export data function
+        function exportData() {
+            alert('Export functionality would be implemented here. Data would be exported as CSV/Excel.');
+        }
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+
+            // Add more charts after initial load
+            setTimeout(() => {
+                initializeAdditionalCharts();
+            }, 500);
+        });
+
+        // Initialize additional charts
+        function initializeAdditionalCharts() {
+            // Inventory Chart
+            const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
+            charts.inventory = new Chart(inventoryCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['In Stock', 'Low Stock', 'Out of Stock', 'On Order'],
+                    datasets: [{
+                        label: 'Items',
+                        data: [450, 75, 25, 120],
+                        backgroundColor: [
+                            '#48bb78',
+                            '#ed8936',
+                            '#f56565',
+                            '#4299e1'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Customer Growth Chart
+            const customerCtx = document.getElementById('customerChart').getContext('2d');
+            charts.customer = new Chart(customerCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [{
+                        label: 'New Customers',
+                        data: [45, 52, 48, 61],
+                        borderColor: '#38b2ac',
+                        backgroundColor: 'rgba(56, 178, 172, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
