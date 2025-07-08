@@ -390,7 +390,7 @@ class ERPDashboard {
         const topProductsCtx = document.getElementById('topProductsChart');
         if (topProductsCtx && !this.charts.topProducts) {
             this.charts.topProducts = new Chart(topProductsCtx, {
-                type: 'horizontalBar',
+                type: 'bar',
                 data: {
                     labels: this.mockData.topProducts.labels,
                     datasets: [{
