@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP Dashboard - Business Analytics</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <h1>ERP Dashboard</h1>
+            </div>
+            <div class="header-info">
+                <span class="date" id="currentDate"></span>
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Admin User</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav-tabs">
+        <div class="nav-container">
+            <button class="nav-tab active" data-section="overview">
+                <i class="fas fa-tachometer-alt"></i>
+                Overview
+            </button>
+            <button class="nav-tab" data-section="sales">
+                <i class="fas fa-chart-bar"></i>
+                Sales
+            </button>
+            <button class="nav-tab" data-section="purchases">
+                <i class="fas fa-shopping-cart"></i>
+                Purchases
+            </button>
+            <button class="nav-tab" data-section="finances">
+                <i class="fas fa-dollar-sign"></i>
+                Finances
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Loading Spinner -->
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner"></div>
+            <p>Loading dashboard data...</p>
+        </div>
+
+        <!-- Overview Section -->
+        <section class="dashboard-section active" id="overview">
+            <div class="section-header">
+                <h2>Business Overview</h2>
+                <p>Key performance indicators and summary metrics</p>
+            </div>
+            
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon sales">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Total Revenue</h3>
+                        <p class="kpi-value" id="totalRevenue">$0</p>
+                        <span class="kpi-change positive" id="revenueChange">+0%</span>
+                    </div>
+                </div>
+                
+                <div class="kpi-card">
+                    <div class="kpi-icon purchases">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Total Purchases</h3>
+                        <p class="kpi-value" id="totalPurchases">$0</p>
+                        <span class="kpi-change negative" id="purchasesChange">+0%</span>
+                    </div>
+                </div>
+                
+                <div class="kpi-card">
+                    <div class="kpi-icon finances">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Net Profit</h3>
+                        <p class="kpi-value" id="netProfit">$0</p>
+                        <span class="kpi-change positive" id="profitChange">+0%</span>
+                    </div>
+                </div>
+                
+                <div class="kpi-card">
+                    <div class="kpi-icon cash">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="kpi-content">
+                        <h3>Cash Flow</h3>
+                        <p class="kpi-value" id="cashFlow">$0</p>
+                        <span class="kpi-change positive" id="cashFlowChange">+0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overview Charts -->
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Monthly Performance Overview</h3>
+                    </div>
+                    <canvas id="overviewChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Revenue vs Expenses</h3>
+                    </div>
+                    <canvas id="revenueExpensesChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sales Section -->
+        <section class="dashboard-section" id="sales">
+            <div class="section-header">
+                <h2>Sales Analytics</h2>
+                <p>Revenue trends, product performance, and sales insights</p>
+            </div>
+            
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Revenue Trends</h3>
+                        <div class="chart-controls">
+                            <select id="revenueTimeframe">
+                                <option value="monthly">Monthly</option>
+                                <option value="quarterly">Quarterly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                        </div>
+                    </div>
+                    <canvas id="revenueTrendsChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Sales by Product Category</h3>
+                    </div>
+                    <canvas id="salesByCategoryChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Monthly Sales Performance</h3>
+                    </div>
+                    <canvas id="monthlySalesChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Top Performing Products</h3>
+                    </div>
+                    <canvas id="topProductsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Purchases Section -->
+        <section class="dashboard-section" id="purchases">
+            <div class="section-header">
+                <h2>Purchase Analytics</h2>
+                <p>Purchase orders, vendor analysis, and cost management</p>
+            </div>
+            
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Purchase Orders Over Time</h3>
+                    </div>
+                    <canvas id="purchaseOrdersChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Vendor Spending Analysis</h3>
+                    </div>
+                    <canvas id="vendorSpendingChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Cost Trends</h3>
+                    </div>
+                    <canvas id="costTrendsChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Purchase Categories</h3>
+                    </div>
+                    <canvas id="purchaseCategoriesChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Finances Section -->
+        <section class="dashboard-section" id="finances">
+            <div class="section-header">
+                <h2>Financial Analytics</h2>
+                <p>Profit & loss, cash flow, and expense management</p>
+            </div>
+            
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Profit & Loss Overview</h3>
+                    </div>
+                    <canvas id="profitLossChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Cash Flow Analysis</h3>
+                    </div>
+                    <canvas id="cashFlowChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Expense Breakdown</h3>
+                    </div>
+                    <canvas id="expenseBreakdownChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Financial Ratios</h3>
+                    </div>
+                    <canvas id="financialRatiosChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 ERP Dashboard. All rights reserved.</p>
+            <p>Last updated: <span id="lastUpdated"></span></p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
