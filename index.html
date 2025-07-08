@@ -292,6 +292,195 @@
             box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
         }
 
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 2% auto;
+            padding: 0;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close {
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        .modal-body {
+            padding: 2rem;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .modal-tabs {
+            display: flex;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 2rem;
+        }
+
+        .modal-tab {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-weight: 600;
+            color: #718096;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .modal-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .modal-tab:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .chart-modal-container {
+            height: 400px;
+            margin-bottom: 2rem;
+        }
+
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        .data-table tr:hover {
+            background-color: rgba(102, 126, 234, 0.05);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-success {
+            background: rgba(72, 187, 120, 0.2);
+            color: #2f855a;
+        }
+
+        .status-warning {
+            background: rgba(237, 137, 54, 0.2);
+            color: #c05621;
+        }
+
+        .status-danger {
+            background: rgba(245, 101, 101, 0.2);
+            color: #c53030;
+        }
+
+        .status-info {
+            background: rgba(66, 153, 225, 0.2);
+            color: #2c5aa0;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .section-header {
             margin: 3rem 0 2rem 0;
             padding: 1rem 0;
@@ -730,11 +919,145 @@
         </div>
     </div>
 
+    <!-- Modal for Chart Details -->
+    <div id="chartModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Chart Details</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-tabs">
+                    <button class="modal-tab active" onclick="switchTab('chart')">📊 Chart View</button>
+                    <button class="modal-tab" onclick="switchTab('table')">📋 Data Table</button>
+                    <button class="modal-tab" onclick="switchTab('insights')">💡 Insights</button>
+                    <button class="modal-tab" onclick="switchTab('export')">📥 Export</button>
+                </div>
+
+                <div id="chartTab" class="tab-content active">
+                    <div class="chart-modal-container">
+                        <canvas id="modalChart"></canvas>
+                    </div>
+                    <div id="chartSummary"></div>
+                </div>
+
+                <div id="tableTab" class="tab-content">
+                    <div id="loadingIndicator" style="text-align: center; padding: 2rem;">
+                        <div class="loading-spinner"></div>
+                        <p style="margin-top: 1rem;">Loading data...</p>
+                    </div>
+                    <div id="tableContainer"></div>
+                </div>
+
+                <div id="insightsTab" class="tab-content">
+                    <div id="insightsContainer">
+                        <h3>📈 Key Insights</h3>
+                        <div id="insightsList"></div>
+                    </div>
+                </div>
+
+                <div id="exportTab" class="tab-content">
+                    <div id="exportContainer">
+                        <h3>📥 Export Options</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                            <button onclick="exportChart('png')" class="controls button">🖼️ Export as PNG</button>
+                            <button onclick="exportChart('pdf')" class="controls button">📄 Export as PDF</button>
+                            <button onclick="exportData('csv')" class="controls button secondary">📊 Export Data (CSV)</button>
+                            <button onclick="exportData('excel')" class="controls button secondary">📈 Export Data (Excel)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Chart configurations and data
         let charts = {};
         let realTimeMode = false;
         let realTimeInterval;
+        let currentModalChart = null;
+        let apiData = {};
+
+        // API endpoints for demo data
+        const API_ENDPOINTS = {
+            users: 'https://jsonplaceholder.typicode.com/users',
+            posts: 'https://jsonplaceholder.typicode.com/posts',
+            products: 'https://fakestoreapi.com/products',
+            quotes: 'https://dummyjson.com/quotes',
+            todos: 'https://jsonplaceholder.typicode.com/todos'
+        };
+
+        // Dummy ERP data generators
+        const dummyDataGenerators = {
+            salesData: () => ({
+                representatives: [
+                    { id: 1, name: 'John Smith', sales: 125000, target: 120000, region: 'North', performance: 104.2 },
+                    { id: 2, name: 'Sarah Johnson', sales: 118000, target: 115000, region: 'South', performance: 102.6 },
+                    { id: 3, name: 'Mike Davis', sales: 112000, target: 110000, region: 'East', performance: 101.8 },
+                    { id: 4, name: 'Emily Brown', sales: 108000, target: 105000, region: 'West', performance: 102.9 },
+                    { id: 5, name: 'David Wilson', sales: 95000, target: 100000, region: 'Central', performance: 95.0 }
+                ],
+                orders: [
+                    { id: 'ORD-001', customer: 'Acme Corp', amount: 15000, status: 'Completed', date: '2024-01-15', rep: 'John Smith' },
+                    { id: 'ORD-002', customer: 'Tech Solutions', amount: 8500, status: 'Processing', date: '2024-01-16', rep: 'Sarah Johnson' },
+                    { id: 'ORD-003', customer: 'Global Industries', amount: 22000, status: 'Shipped', date: '2024-01-17', rep: 'Mike Davis' },
+                    { id: 'ORD-004', customer: 'StartUp Inc', amount: 5500, status: 'Pending', date: '2024-01-18', rep: 'Emily Brown' },
+                    { id: 'ORD-005', customer: 'Enterprise Ltd', amount: 18000, status: 'Completed', date: '2024-01-19', rep: 'David Wilson' }
+                ]
+            }),
+
+            inventoryData: () => ({
+                items: [
+                    { id: 'ITM-001', name: 'Laptop Pro 15"', category: 'Electronics', stock: 45, reorderPoint: 20, value: 1200, turnover: 6.2 },
+                    { id: 'ITM-002', name: 'Office Chair Deluxe', category: 'Furniture', stock: 12, reorderPoint: 15, value: 350, turnover: 4.1 },
+                    { id: 'ITM-003', name: 'Wireless Mouse', category: 'Electronics', stock: 150, reorderPoint: 50, value: 25, turnover: 8.5 },
+                    { id: 'ITM-004', name: 'Desk Lamp LED', category: 'Furniture', stock: 8, reorderPoint: 10, value: 45, turnover: 3.2 },
+                    { id: 'ITM-005', name: 'Smartphone Case', category: 'Accessories', stock: 200, reorderPoint: 75, value: 15, turnover: 12.1 }
+                ],
+                movements: [
+                    { date: '2024-01-15', item: 'Laptop Pro 15"', type: 'Sale', quantity: -5, balance: 45 },
+                    { date: '2024-01-16', item: 'Office Chair Deluxe', type: 'Purchase', quantity: 10, balance: 12 },
+                    { date: '2024-01-17', item: 'Wireless Mouse', type: 'Sale', quantity: -25, balance: 150 },
+                    { date: '2024-01-18', item: 'Desk Lamp LED', type: 'Sale', quantity: -2, balance: 8 },
+                    { date: '2024-01-19', item: 'Smartphone Case', type: 'Sale', quantity: -50, balance: 200 }
+                ]
+            }),
+
+            financialData: () => ({
+                transactions: [
+                    { id: 'TXN-001', date: '2024-01-15', description: 'Sales Revenue - Acme Corp', amount: 15000, type: 'Income', category: 'Sales' },
+                    { id: 'TXN-002', date: '2024-01-16', description: 'Office Rent Payment', amount: -5000, type: 'Expense', category: 'Overhead' },
+                    { id: 'TXN-003', date: '2024-01-17', description: 'Equipment Purchase', amount: -12000, type: 'Expense', category: 'Assets' },
+                    { id: 'TXN-004', date: '2024-01-18', description: 'Consulting Services', amount: 8500, type: 'Income', category: 'Services' },
+                    { id: 'TXN-005', date: '2024-01-19', description: 'Marketing Campaign', amount: -3500, type: 'Expense', category: 'Marketing' }
+                ],
+                accounts: [
+                    { account: 'Cash', balance: 125000, type: 'Asset', lastUpdated: '2024-01-19' },
+                    { account: 'Accounts Receivable', balance: 85000, type: 'Asset', lastUpdated: '2024-01-19' },
+                    { account: 'Inventory', balance: 65000, type: 'Asset', lastUpdated: '2024-01-19' },
+                    { account: 'Accounts Payable', balance: -45000, type: 'Liability', lastUpdated: '2024-01-19' },
+                    { account: 'Revenue', balance: 450000, type: 'Income', lastUpdated: '2024-01-19' }
+                ]
+            }),
+
+            employeeData: () => ({
+                employees: [
+                    { id: 'EMP-001', name: 'Alice Johnson', department: 'Sales', position: 'Sales Manager', salary: 75000, performance: 92, attendance: 96.5 },
+                    { id: 'EMP-002', name: 'Bob Smith', department: 'Engineering', position: 'Senior Developer', salary: 85000, performance: 88, attendance: 94.2 },
+                    { id: 'EMP-003', name: 'Carol Davis', department: 'Marketing', position: 'Marketing Specialist', salary: 55000, performance: 85, attendance: 98.1 },
+                    { id: 'EMP-004', name: 'David Brown', department: 'HR', position: 'HR Coordinator', salary: 50000, performance: 90, attendance: 97.3 },
+                    { id: 'EMP-005', name: 'Eva Wilson', department: 'Finance', position: 'Financial Analyst', salary: 65000, performance: 94, attendance: 95.8 }
+                ],
+                attendance: [
+                    { date: '2024-01-15', present: 245, absent: 12, remote: 85, total: 257 },
+                    { date: '2024-01-16', present: 248, absent: 9, remote: 92, total: 257 },
+                    { date: '2024-01-17', present: 242, absent: 15, remote: 88, total: 257 },
+                    { date: '2024-01-18', present: 250, absent: 7, remote: 95, total: 257 },
+                    { date: '2024-01-19', present: 246, absent: 11, remote: 90, total: 257 }
+                ]
+            })
+        };
 
         // Chart color schemes
         const colorSchemes = {
@@ -2203,9 +2526,415 @@
             });
         }
 
-        // Show detailed chart information
+        // Enhanced chart details with modal
         function showChartDetails(chartTitle) {
-            alert(`Detailed view for: ${chartTitle}\n\nThis would open a modal with:\n- Larger chart view\n- Detailed data table\n- Export options\n- Drill-down capabilities`);
+            const modal = document.getElementById('chartModal');
+            const modalTitle = document.getElementById('modalTitle');
+
+            modalTitle.textContent = chartTitle;
+            modal.style.display = 'block';
+
+            // Reset to chart tab
+            switchTab('chart');
+
+            // Load chart data based on title
+            loadModalChart(chartTitle);
+
+            // Load table data
+            loadTableData(chartTitle);
+
+            // Generate insights
+            generateInsights(chartTitle);
+        }
+
+        // Load chart in modal
+        function loadModalChart(chartTitle) {
+            const modalChartCtx = document.getElementById('modalChart').getContext('2d');
+
+            // Destroy existing chart if any
+            if (currentModalChart) {
+                currentModalChart.destroy();
+            }
+
+            // Create enhanced chart based on title
+            const chartConfig = getEnhancedChartConfig(chartTitle);
+            currentModalChart = new Chart(modalChartCtx, chartConfig);
+        }
+
+        // Get enhanced chart configuration
+        function getEnhancedChartConfig(chartTitle) {
+            const baseConfig = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#667eea',
+                        borderWidth: 1
+                    }
+                }
+            };
+
+            // Return specific config based on chart title
+            if (chartTitle.includes('Sales')) {
+                return {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        datasets: [{
+                            label: 'Sales Revenue ($)',
+                            data: [450000, 520000, 480000, 610000, 580000, 670000, 720000, 690000, 750000, 820000, 780000, 850000],
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        ...baseConfig,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return '$' + (value / 1000) + 'K';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+            } else if (chartTitle.includes('Inventory')) {
+                return {
+                    type: 'bar',
+                    data: {
+                        labels: ['Electronics', 'Furniture', 'Accessories', 'Office Supplies', 'Equipment'],
+                        datasets: [{
+                            label: 'Stock Value ($)',
+                            data: [125000, 85000, 45000, 32000, 78000],
+                            backgroundColor: colorSchemes.primary
+                        }]
+                    },
+                    options: {
+                        ...baseConfig,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return '$' + (value / 1000) + 'K';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+            } else {
+                // Default configuration
+                return {
+                    type: 'line',
+                    data: {
+                        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                        datasets: [{
+                            label: 'Performance',
+                            data: [65, 78, 82, 91],
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: baseConfig
+                };
+            }
+        }
+
+        // Load table data based on chart type
+        async function loadTableData(chartTitle) {
+            const tableContainer = document.getElementById('tableContainer');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+
+            loadingIndicator.style.display = 'block';
+            tableContainer.innerHTML = '';
+
+            try {
+                let tableData;
+                let tableHTML;
+
+                if (chartTitle.includes('Sales')) {
+                    tableData = dummyDataGenerators.salesData();
+                    tableHTML = generateSalesTable(tableData);
+                } else if (chartTitle.includes('Inventory')) {
+                    tableData = dummyDataGenerators.inventoryData();
+                    tableHTML = generateInventoryTable(tableData);
+                } else if (chartTitle.includes('Financial') || chartTitle.includes('Profit')) {
+                    tableData = dummyDataGenerators.financialData();
+                    tableHTML = generateFinancialTable(tableData);
+                } else if (chartTitle.includes('Employee')) {
+                    tableData = dummyDataGenerators.employeeData();
+                    tableHTML = generateEmployeeTable(tableData);
+                } else {
+                    // Try to fetch from external API for demo
+                    const response = await fetch(API_ENDPOINTS.products);
+                    const products = await response.json();
+                    tableHTML = generateProductTable(products.slice(0, 10));
+                }
+
+                setTimeout(() => {
+                    loadingIndicator.style.display = 'none';
+                    tableContainer.innerHTML = tableHTML;
+                }, 1000); // Simulate loading time
+
+            } catch (error) {
+                console.error('Error loading table data:', error);
+                loadingIndicator.style.display = 'none';
+                tableContainer.innerHTML = '<p style="text-align: center; color: #f56565;">Error loading data. Please try again.</p>';
+            }
+        }
+
+        // Table generation functions
+        function generateSalesTable(data) {
+            return `
+                <h3>📊 Sales Representatives Performance</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Rep ID</th>
+                            <th>Name</th>
+                            <th>Region</th>
+                            <th>Sales ($)</th>
+                            <th>Target ($)</th>
+                            <th>Performance (%)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.representatives.map(rep => `
+                            <tr>
+                                <td>${rep.id}</td>
+                                <td>${rep.name}</td>
+                                <td>${rep.region}</td>
+                                <td>$${rep.sales.toLocaleString()}</td>
+                                <td>$${rep.target.toLocaleString()}</td>
+                                <td>${rep.performance.toFixed(1)}%</td>
+                                <td><span class="status-badge ${rep.performance >= 100 ? 'status-success' : rep.performance >= 90 ? 'status-warning' : 'status-danger'}">${rep.performance >= 100 ? 'Exceeds' : rep.performance >= 90 ? 'On Track' : 'Below'}</span></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+
+                <h3 style="margin-top: 2rem;">📋 Recent Orders</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Amount ($)</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Sales Rep</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.orders.map(order => `
+                            <tr>
+                                <td>${order.id}</td>
+                                <td>${order.customer}</td>
+                                <td>$${order.amount.toLocaleString()}</td>
+                                <td><span class="status-badge ${getStatusClass(order.status)}">${order.status}</span></td>
+                                <td>${order.date}</td>
+                                <td>${order.rep}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function generateInventoryTable(data) {
+            return `
+                <h3>📦 Inventory Items</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Item ID</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Current Stock</th>
+                            <th>Reorder Point</th>
+                            <th>Unit Value ($)</th>
+                            <th>Turnover Rate</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.items.map(item => `
+                            <tr>
+                                <td>${item.id}</td>
+                                <td>${item.name}</td>
+                                <td>${item.category}</td>
+                                <td>${item.stock}</td>
+                                <td>${item.reorderPoint}</td>
+                                <td>$${item.value}</td>
+                                <td>${item.turnover}x</td>
+                                <td><span class="status-badge ${item.stock <= item.reorderPoint ? 'status-danger' : item.stock <= item.reorderPoint * 1.5 ? 'status-warning' : 'status-success'}">${item.stock <= item.reorderPoint ? 'Reorder' : item.stock <= item.reorderPoint * 1.5 ? 'Low Stock' : 'In Stock'}</span></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+
+                <h3 style="margin-top: 2rem;">🔄 Recent Stock Movements</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Item</th>
+                            <th>Type</th>
+                            <th>Quantity</th>
+                            <th>Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.movements.map(movement => `
+                            <tr>
+                                <td>${movement.date}</td>
+                                <td>${movement.item}</td>
+                                <td><span class="status-badge ${movement.type === 'Sale' ? 'status-info' : 'status-success'}">${movement.type}</span></td>
+                                <td style="color: ${movement.quantity > 0 ? '#48bb78' : '#f56565'}">${movement.quantity > 0 ? '+' : ''}${movement.quantity}</td>
+                                <td>${movement.balance}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function generateFinancialTable(data) {
+            return `
+                <h3>💰 Recent Transactions</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Amount ($)</th>
+                            <th>Type</th>
+                            <th>Category</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.transactions.map(txn => `
+                            <tr>
+                                <td>${txn.id}</td>
+                                <td>${txn.date}</td>
+                                <td>${txn.description}</td>
+                                <td style="color: ${txn.amount > 0 ? '#48bb78' : '#f56565'}">${txn.amount > 0 ? '+' : ''}$${Math.abs(txn.amount).toLocaleString()}</td>
+                                <td><span class="status-badge ${txn.type === 'Income' ? 'status-success' : 'status-warning'}">${txn.type}</span></td>
+                                <td>${txn.category}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+
+                <h3 style="margin-top: 2rem;">🏦 Account Balances</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th>Balance ($)</th>
+                            <th>Type</th>
+                            <th>Last Updated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.accounts.map(account => `
+                            <tr>
+                                <td>${account.account}</td>
+                                <td style="color: ${account.balance > 0 ? '#48bb78' : '#f56565'}">${account.balance > 0 ? '+' : ''}$${Math.abs(account.balance).toLocaleString()}</td>
+                                <td><span class="status-badge status-info">${account.type}</span></td>
+                                <td>${account.lastUpdated}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function generateEmployeeTable(data) {
+            return `
+                <h3>👥 Employee Information</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Position</th>
+                            <th>Salary ($)</th>
+                            <th>Performance</th>
+                            <th>Attendance (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.employees.map(emp => `
+                            <tr>
+                                <td>${emp.id}</td>
+                                <td>${emp.name}</td>
+                                <td>${emp.department}</td>
+                                <td>${emp.position}</td>
+                                <td>$${emp.salary.toLocaleString()}</td>
+                                <td><span class="status-badge ${emp.performance >= 90 ? 'status-success' : emp.performance >= 80 ? 'status-warning' : 'status-danger'}">${emp.performance}%</span></td>
+                                <td>${emp.attendance.toFixed(1)}%</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function generateProductTable(products) {
+            return `
+                <h3>🛍️ Product Catalog (External API Demo)</h3>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Price ($)</th>
+                            <th>Rating</th>
+                            <th>Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${products.map(product => `
+                            <tr>
+                                <td>${product.id}</td>
+                                <td>${product.title.substring(0, 50)}...</td>
+                                <td>${product.category}</td>
+                                <td>$${product.price}</td>
+                                <td>${product.rating?.rate || 'N/A'} ⭐</td>
+                                <td><span class="status-badge status-info">${product.rating?.count || 'N/A'}</span></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function getStatusClass(status) {
+            switch(status.toLowerCase()) {
+                case 'completed': return 'status-success';
+                case 'processing': return 'status-warning';
+                case 'shipped': return 'status-info';
+                case 'pending': return 'status-warning';
+                case 'cancelled': return 'status-danger';
+                default: return 'status-info';
+            }
         }
 
         // Update header statistics
@@ -2279,9 +3008,188 @@
         `;
         document.head.appendChild(style);
 
+        // Modal control functions
+        function closeModal() {
+            const modal = document.getElementById('chartModal');
+            modal.style.display = 'none';
+
+            if (currentModalChart) {
+                currentModalChart.destroy();
+                currentModalChart = null;
+            }
+        }
+
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            document.querySelectorAll('.modal-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabName + 'Tab').classList.add('active');
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Generate insights based on chart type
+        function generateInsights(chartTitle) {
+            const insightsList = document.getElementById('insightsList');
+            let insights = [];
+
+            if (chartTitle.includes('Sales')) {
+                insights = [
+                    { icon: '📈', text: 'Sales revenue increased by 12.5% compared to last month', type: 'positive' },
+                    { icon: '🎯', text: 'Top performer: John Smith exceeded target by 4.2%', type: 'positive' },
+                    { icon: '⚠️', text: 'David Wilson is 5% below target - needs attention', type: 'warning' },
+                    { icon: '💡', text: 'North region shows strongest growth potential', type: 'info' }
+                ];
+            } else if (chartTitle.includes('Inventory')) {
+                insights = [
+                    { icon: '📦', text: 'Inventory turnover improved by 0.3x this quarter', type: 'positive' },
+                    { icon: '⚠️', text: '3 items below reorder point - immediate action required', type: 'warning' },
+                    { icon: '💰', text: 'Electronics category has highest value density', type: 'info' },
+                    { icon: '🔄', text: 'Wireless Mouse has excellent turnover rate of 8.5x', type: 'positive' }
+                ];
+            } else if (chartTitle.includes('Financial')) {
+                insights = [
+                    { icon: '💰', text: 'Net profit margin increased to 23.4%', type: 'positive' },
+                    { icon: '📊', text: 'Cash flow positive for 6 consecutive months', type: 'positive' },
+                    { icon: '⚠️', text: 'Accounts receivable aging needs attention', type: 'warning' },
+                    { icon: '💡', text: 'Consider investing excess cash in growth opportunities', type: 'info' }
+                ];
+            } else if (chartTitle.includes('Employee')) {
+                insights = [
+                    { icon: '👥', text: 'Employee satisfaction increased by 3.2 points', type: 'positive' },
+                    { icon: '📈', text: 'Productivity scores consistently above 90%', type: 'positive' },
+                    { icon: '⚠️', text: 'HR department understaffed by 20%', type: 'warning' },
+                    { icon: '💡', text: 'Remote work adoption at 38% - consider hybrid policies', type: 'info' }
+                ];
+            } else {
+                insights = [
+                    { icon: '📊', text: 'Overall business performance trending upward', type: 'positive' },
+                    { icon: '💡', text: 'Data quality is excellent across all metrics', type: 'info' },
+                    { icon: '🎯', text: 'Key performance indicators within target ranges', type: 'positive' }
+                ];
+            }
+
+            insightsList.innerHTML = insights.map(insight => `
+                <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; margin: 0.5rem 0; border-radius: 8px; background: ${getInsightBackground(insight.type)};">
+                    <span style="font-size: 1.5rem;">${insight.icon}</span>
+                    <span style="flex: 1;">${insight.text}</span>
+                    <span class="status-badge ${getInsightStatusClass(insight.type)}">${insight.type.toUpperCase()}</span>
+                </div>
+            `).join('');
+        }
+
+        function getInsightBackground(type) {
+            switch(type) {
+                case 'positive': return 'rgba(72, 187, 120, 0.1)';
+                case 'warning': return 'rgba(237, 137, 54, 0.1)';
+                case 'info': return 'rgba(66, 153, 225, 0.1)';
+                default: return 'rgba(102, 126, 234, 0.1)';
+            }
+        }
+
+        function getInsightStatusClass(type) {
+            switch(type) {
+                case 'positive': return 'status-success';
+                case 'warning': return 'status-warning';
+                case 'info': return 'status-info';
+                default: return 'status-info';
+            }
+        }
+
+        // Export functions
+        function exportChart(format) {
+            if (!currentModalChart) {
+                showNotification('No chart to export', 'warning');
+                return;
+            }
+
+            if (format === 'png') {
+                const url = currentModalChart.toBase64Image();
+                const link = document.createElement('a');
+                link.download = 'chart.png';
+                link.href = url;
+                link.click();
+                showNotification('Chart exported as PNG', 'success');
+            } else if (format === 'pdf') {
+                showNotification('PDF export would be implemented with jsPDF library', 'info');
+            }
+        }
+
+        function exportData(format) {
+            const modalTitle = document.getElementById('modalTitle').textContent;
+
+            if (format === 'csv') {
+                // Generate CSV data based on current chart
+                let csvData = generateCSVData(modalTitle);
+                downloadCSV(csvData, 'data.csv');
+                showNotification('Data exported as CSV', 'success');
+            } else if (format === 'excel') {
+                showNotification('Excel export would be implemented with SheetJS library', 'info');
+            }
+        }
+
+        function generateCSVData(chartTitle) {
+            if (chartTitle.includes('Sales')) {
+                const data = dummyDataGenerators.salesData();
+                let csv = 'Name,Region,Sales,Target,Performance\n';
+                data.representatives.forEach(rep => {
+                    csv += `${rep.name},${rep.region},${rep.sales},${rep.target},${rep.performance}\n`;
+                });
+                return csv;
+            }
+            // Add more data types as needed
+            return 'Sample,Data,Export\n1,2,3\n4,5,6\n';
+        }
+
+        function downloadCSV(csvData, filename) {
+            const blob = new Blob([csvData], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('chartModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize API data on load
+        async function initializeAPIData() {
+            try {
+                // Fetch some external data for demo purposes
+                const [users, products] = await Promise.all([
+                    fetch(API_ENDPOINTS.users).then(r => r.json()),
+                    fetch(API_ENDPOINTS.products).then(r => r.json())
+                ]);
+
+                apiData.users = users;
+                apiData.products = products;
+
+                console.log('External API data loaded successfully');
+            } catch (error) {
+                console.warn('Could not load external API data:', error);
+            }
+        }
+
         // Show welcome notification
         setTimeout(() => {
-            showNotification('ERP Dashboard loaded successfully! Use Ctrl+R to refresh, Ctrl+E to export, Ctrl+T for real-time mode.', 'success');
+            showNotification('ERP Dashboard loaded successfully! Click any chart for detailed view. Use Ctrl+R to refresh, Ctrl+E to export, Ctrl+T for real-time mode.', 'success');
+            initializeAPIData();
         }, 1000);
     </script>
 </body>
