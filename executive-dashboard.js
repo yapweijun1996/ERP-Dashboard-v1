@@ -21,7 +21,7 @@ class ExecutiveDashboard {
         setTimeout(() => {
             this.initializeRevenueProfitChart();
             this.initializeCashFlowChart();
-        }, 500);
+        }, 1000);
 
         // Update every 5 minutes for real-time executive view
         setInterval(() => {
@@ -413,16 +413,28 @@ class ExecutiveDashboard {
                 if (!this.charts.cashFlowChart) this.initializeCashFlowChart();
                 break;
             case 'financial-performance':
-                if (!this.charts.pnlChart) this.initializePnLChart();
-                if (!this.charts.ratiosChart) this.initializeRatiosChart();
+                if (!this.charts.pnlChart && typeof this.initializePnLChart === 'function') {
+                    this.initializePnLChart();
+                }
+                if (!this.charts.ratiosChart && typeof this.initializeRatiosChart === 'function') {
+                    this.initializeRatiosChart();
+                }
                 break;
             case 'operational-metrics':
-                if (!this.charts.customerChart) this.initializeCustomerChart();
-                if (!this.charts.operationsChart) this.initializeOperationsChart();
+                if (!this.charts.customerChart && typeof this.initializeCustomerChart === 'function') {
+                    this.initializeCustomerChart();
+                }
+                if (!this.charts.operationsChart && typeof this.initializeOperationsChart === 'function') {
+                    this.initializeOperationsChart();
+                }
                 break;
             case 'strategic-insights':
-                if (!this.charts.marketChart) this.initializeMarketChart();
-                if (!this.charts.growthChart) this.initializeGrowthChart();
+                if (!this.charts.marketChart && typeof this.initializeMarketChart === 'function') {
+                    this.initializeMarketChart();
+                }
+                if (!this.charts.growthChart && typeof this.initializeGrowthChart === 'function') {
+                    this.initializeGrowthChart();
+                }
                 break;
         }
     }
@@ -583,21 +595,37 @@ class ExecutiveDashboard {
     }
 
     initializeExecutiveCharts() {
+        // Initialize core charts first
         this.initializeRevenueProfitChart();
         this.initializeCashFlowChart();
-        this.initializePnLChart();
-        this.initializeRatiosChart();
-        this.initializeCustomerChart();
-        this.initializeOperationsChart();
-        this.initializeMarketChart();
-        this.initializeGrowthChart();
+
+        // Initialize extended charts if methods are available
+        if (typeof this.initializePnLChart === 'function') {
+            this.initializePnLChart();
+        }
+        if (typeof this.initializeRatiosChart === 'function') {
+            this.initializeRatiosChart();
+        }
+        if (typeof this.initializeCustomerChart === 'function') {
+            this.initializeCustomerChart();
+        }
+        if (typeof this.initializeOperationsChart === 'function') {
+            this.initializeOperationsChart();
+        }
+        if (typeof this.initializeMarketChart === 'function') {
+            this.initializeMarketChart();
+        }
+        if (typeof this.initializeGrowthChart === 'function') {
+            this.initializeGrowthChart();
+        }
     }
 
     initializeRevenueProfitChart() {
         const ctx = document.getElementById('exec-revenue-profit-chart');
         if (!ctx || this.charts.revenueProfitChart) return;
 
-        this.charts.revenueProfitChart = new Chart(ctx, {
+        try {
+            this.charts.revenueProfitChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -637,13 +665,17 @@ class ExecutiveDashboard {
                 }
             }
         });
+        } catch (error) {
+            console.error('Error initializing revenue profit chart:', error);
+        }
     }
 
     initializeCashFlowChart() {
         const ctx = document.getElementById('exec-cashflow-chart');
         if (!ctx || this.charts.cashFlowChart) return;
 
-        this.charts.cashFlowChart = new Chart(ctx, {
+        try {
+            this.charts.cashFlowChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -669,6 +701,9 @@ class ExecutiveDashboard {
                 }
             }
         });
+        } catch (error) {
+            console.error('Error initializing cash flow chart:', error);
+        }
     }
 
     exportExecutiveSummary() {

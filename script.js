@@ -162,6 +162,7 @@ class ERPDashboard {
     }
 
     initializeCharts() {
+        // Initialize overview charts since overview section is active by default
         this.initializeOverviewCharts();
     }
 
@@ -186,7 +187,8 @@ class ERPDashboard {
         // Monthly Performance Overview
         const overviewCtx = document.getElementById('overviewChart');
         if (overviewCtx && !this.charts.overview) {
-            this.charts.overview = new Chart(overviewCtx, {
+            try {
+                this.charts.overview = new Chart(overviewCtx, {
                 type: 'line',
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -208,12 +210,16 @@ class ERPDashboard {
                 },
                 options: this.getDefaultChartOptions()
             });
+            } catch (error) {
+                console.error('Error initializing overview chart:', error);
+            }
         }
 
         // Revenue vs Expenses
         const revenueExpensesCtx = document.getElementById('revenueExpensesChart');
         if (revenueExpensesCtx && !this.charts.revenueExpenses) {
-            this.charts.revenueExpenses = new Chart(revenueExpensesCtx, {
+            try {
+                this.charts.revenueExpenses = new Chart(revenueExpensesCtx, {
                 type: 'bar',
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -229,6 +235,9 @@ class ERPDashboard {
                 },
                 options: this.getDefaultChartOptions()
             });
+            } catch (error) {
+                console.error('Error initializing revenue expenses chart:', error);
+            }
         }
     }
 
